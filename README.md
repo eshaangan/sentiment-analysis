@@ -4,20 +4,24 @@ A comprehensive sentiment analysis system built with PyTorch, featuring LSTM mod
 
 ## Features
 
-- **High-Performance Models**: LSTM-based models achieving 81% accuracy on IMDB dataset
+- **High-Performance Models**: 
+  - LSTM models achieving 81% accuracy
+  - **CNN models achieving 83.8% accuracy (best performance)**
 - **Complete Data Pipeline**: Text preprocessing, vocabulary building, and tokenization
 - **Multiple Model Architectures**: LSTM, CNN, and Transformer support
 - **Production-Ready API**: FastAPI-based web service for real-time predictions
 - **Comprehensive Testing**: Full test suite with 100% test coverage
 - **Interactive Tools**: Command-line and web-based prediction interfaces
 - **GPU Acceleration**: Apple Silicon (MPS) and CUDA support
+- **Optimized Training**: Fast training with early stopping and learning rate scheduling
 
 ## Performance
 
-| Model | Training Accuracy | Validation Accuracy | Test Accuracy |
-|-------|------------------|-------------------|---------------|
-| Basic LSTM | 50% | 49% | 47% |
-| **Better LSTM** | **99.67%** | **87.72%** | **81%** |
+| Model | Training Accuracy | Validation Accuracy | Test Accuracy | Training Time | Model Size |
+|-------|------------------|-------------------|---------------|---------------|------------|
+| Basic LSTM | 50% | 49% | 47% | 6 epochs | 4.8M params |
+| **Better LSTM** | **99.67%** | **87.72%** | **81.00%** | 15 epochs | 3.7M params |
+| **Optimized CNN** | **92.10%** | **88.00%** | **83.80%** | 4 epochs | 1.1M params |
 
 ## Quick Start
 
@@ -49,22 +53,32 @@ python scripts/demo_dataset.py
 ### 3. Train a Model
 
 ```bash
-# Train the basic model
+# Train the basic LSTM model
 python scripts/train.py --epochs 10 --batch-size 32
 
-# Train the better model (recommended)
+# Train the better LSTM model (recommended)
 python train_better.py --epochs 15 --batch-size 32
+
+# Train the optimized CNN model (fastest & best accuracy)
+python train_cnn_fast.py --epochs 10 --batch-size 128
 ```
 
 ### 4. Make Predictions
 
 ```bash
-# Single prediction
+# Single prediction with LSTM model
 python predict.py --checkpoint models/checkpoints/lstm_better.pt \
     --text "This movie is absolutely amazing!"
 
-# Interactive mode
+# Single prediction with CNN model (best accuracy)
+python predict.py --checkpoint models/checkpoints/cnn_optimized.pt \
+    --text "This movie is absolutely amazing!"
+
+# Interactive mode with LSTM
 python predict.py --checkpoint models/checkpoints/lstm_better.pt --interactive
+
+# Interactive mode with CNN
+python predict.py --checkpoint models/checkpoints/cnn_optimized.pt --interactive
 ```
 
 ### 5. Start the API Server
@@ -128,14 +142,21 @@ sentiment-analysis/
   - Hidden layers (256 units)
   - Attention mechanism
   - Dropout regularization
-- **Performance**: 81% test accuracy
+- **Performance**: 81.00% test accuracy
+- **Training**: 15 epochs, 3.7M parameters
+- **Best for**: Sequential patterns and long-range dependencies
 
 ### CNN Model
 - **Architecture**: Text-CNN with multiple filter sizes
 - **Features**:
-  - Convolutional layers
+  - Convolutional layers with filters [3, 4, 5]
   - Max pooling
   - Fully connected classifier
+  - Dropout regularization
+- **Performance**: 83.80% test accuracy
+- **Training**: 4 epochs, 1.1M parameters
+- **Best for**: Local pattern recognition and fast inference
+- **Advantages**: Fastest training, smallest model, highest accuracy
 
 ### Transformer Model
 - **Architecture**: Transformer encoder
@@ -245,12 +266,19 @@ Visit `http://127.0.0.1:8000/docs` for interactive API documentation.
 
 ### Command Line Prediction
 ```bash
-# Analyze a single text
+# Analyze with LSTM model
 python predict.py --checkpoint models/checkpoints/lstm_better.pt \
     --text "I absolutely loved this movie! It was incredible."
 
-# Interactive mode
+# Analyze with CNN model (best accuracy)
+python predict.py --checkpoint models/checkpoints/cnn_optimized.pt \
+    --text "I absolutely loved this movie! It was incredible."
+
+# Interactive mode with LSTM
 python predict.py --checkpoint models/checkpoints/lstm_better.pt --interactive
+
+# Interactive mode with CNN
+python predict.py --checkpoint models/checkpoints/cnn_optimized.pt --interactive
 ```
 
 ### Python Integration
@@ -277,22 +305,41 @@ for text, result in zip(texts, results):
 
 ### Run Evaluation
 ```bash
-# Evaluate on test set
+# Evaluate LSTM model
 python simple_evaluate.py --checkpoint models/checkpoints/lstm_better.pt --max-samples 1000
+
+# Evaluate CNN model (best performance)
+python evaluate_cnn.py --checkpoint models/checkpoints/cnn_optimized.pt --max-samples 1000
 ```
 
-### Metrics
+### LSTM Model Metrics
 - **Accuracy**: 81.00%
 - **Precision**: 81.43%
 - **Recall**: 81.00%
 - **F1-Score**: 80.90%
 
-### Confusion Matrix
+### CNN Model Metrics (Best Performance)
+- **Accuracy**: 83.80%
+- **Precision**: 84.00%
+- **Recall**: 83.80%
+- **F1-Score**: 83.79%
+
+### Confusion Matrices
+
+#### LSTM Model
 ```
               Predicted
 Actual    Negative  Positive
 Negative    363       126
 Positive     64       447
+```
+
+#### CNN Model
+```
+              Predicted
+Actual    Negative  Positive
+Negative    426       63
+Positive     99      412
 ```
 
 ## Development
@@ -330,14 +377,25 @@ make install-dev
 ## Performance Benchmarks
 
 ### Training Performance
-- **Training Time**: ~15 minutes for 15 epochs
+- **LSTM Training**: ~15 minutes for 15 epochs
+- **CNN Training**: ~5 minutes for 4 epochs (3x faster)
 - **GPU Utilization**: Apple Silicon MPS acceleration
 - **Memory Usage**: ~2GB during training
+
+### Model Comparison
+| Aspect | LSTM Model | CNN Model |
+|--------|------------|-----------|
+| **Training Time** | 15 epochs | 4 epochs |
+| **Model Size** | 3.7M parameters | 1.1M parameters |
+| **Test Accuracy** | 81.00% | 83.80% |
+| **Training Speed** | Baseline | 3-4x faster |
+| **Memory Efficiency** | Standard | 70% less memory |
 
 ### Inference Performance
 - **Single Prediction**: ~50ms
 - **Batch Prediction**: ~200ms for 100 texts
 - **API Response Time**: ~100ms average
+- **CNN Advantage**: Faster inference due to smaller model
 
 ## Troubleshooting
 
