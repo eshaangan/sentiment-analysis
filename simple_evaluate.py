@@ -127,7 +127,7 @@ def main():
         hidden_dim=256,
         output_dim=2,
         bidirectional=True,
-        pooling="attention",
+        pooling="mean",  # Better model uses mean pooling
     )
     model = LSTMModel(config)
     model.load_state_dict(checkpoint["model_state"])
