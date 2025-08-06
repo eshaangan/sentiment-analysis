@@ -1,0 +1,69 @@
+# Training Configuration for Sentiment Analysis
+# This file defines training parameters, dataset settings, and optimization
+
+# Dataset Configuration
+dataset:
+  train_path: "data/processed/imdb_train.csv"
+  test_path: "data/processed/imdb_test.csv"
+  text_column: "review"
+  label_column: "sentiment"
+  
+  # Data splitting (if validation set needs to be created from train)
+  train_split: 0.85              # 85% for training
+  val_split: 0.15                # 15% for validation
+  
+  # Text preprocessing
+  max_length: 512                # Maximum sequence length
+  min_frequency: 2               # Minimum word frequency for vocabulary
+  max_vocab_size: 10000          # Maximum vocabulary size
+
+# Training Parameters
+training:
+  epochs: 10                     # Number of training epochs
+  batch_size: 32                 # Training batch size
+  val_batch_size: 64             # Validation batch size
+  
+  # Optimization
+  optimizer: "adam"              # Optimizer type: adam, sgd, adamw
+  learning_rate: 0.001           # Initial learning rate
+  weight_decay: 0.01             # L2 regularization
+  
+  # Learning rate scheduling
+  scheduler:
+    type: "cosine"               # Type: step, exponential, cosine, plateau
+    step_size: 5                 # For StepLR
+    gamma: 0.5                   # Decay factor
+    patience: 3                  # For ReduceLROnPlateau
+  
+  # Loss function
+  loss_function: "cross_entropy"  # cross_entropy, label_smoothing
+  label_smoothing: 0.1           # Label smoothing factor
+  
+# Monitoring and Logging
+monitoring:
+  log_interval: 100              # Log every N batches
+  eval_interval: 1               # Evaluate every N epochs
+  
+  # Metrics to track
+  metrics: ["accuracy", "precision", "recall", "f1"]
+  
+# Checkpointing
+checkpointing:
+  save_dir: "models/checkpoints"
+  save_best_only: true           # Save only the best model
+  monitor: "val_accuracy"        # Metric to monitor for best model
+  mode: "max"                    # "max" for accuracy, "min" for loss
+  
+# Early Stopping
+early_stopping:
+  enabled: true
+  patience: 5                    # Number of epochs to wait for improvement
+  monitor: "val_accuracy"        # Metric to monitor
+  mode: "max"                    # "max" for accuracy, "min" for loss
+  min_delta: 0.001               # Minimum change to qualify as improvement
+
+# Hardware Configuration
+hardware:
+  device: "auto"                 # "auto", "cpu", "cuda", "mps"
+  num_workers: 4                 # Number of data loading workers
+  pin_memory: true               # Pin memory for faster GPU transfer

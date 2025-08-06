@@ -1,0 +1,57 @@
+# Model Configuration for Sentiment Analysis
+# This file defines the architecture and hyperparameters for different model types
+
+# LSTM Model Configuration
+lstm:
+  # Architecture parameters
+  vocab_size: 10000              # Will be set automatically based on vocabulary
+  embedding_dim: 128             # Dimension of word embeddings
+  hidden_size: 256               # Size of LSTM hidden state
+  num_layers: 2                  # Number of LSTM layers
+  bidirectional: true            # Use bidirectional LSTM
+  dropout: 0.3                   # Dropout rate for regularization
+  
+  # Pooling strategy: 'last', 'max', 'mean', 'attention'
+  pooling: 'attention'
+  
+  # Attention mechanism (if pooling='attention')
+  attention:
+    num_heads: 8                 # Number of attention heads
+    dropout: 0.1                 # Attention dropout
+
+# CNN Model Configuration  
+cnn:
+  vocab_size: 10000              # Will be set automatically
+  embedding_dim: 128             # Dimension of word embeddings
+  num_filters: 100               # Number of filters per filter size
+  filter_sizes: [2, 3, 4, 5]    # Convolution filter sizes
+  dropout: 0.5                   # Dropout rate
+  
+# Transformer Model Configuration
+transformer:
+  vocab_size: 10000              # Will be set automatically
+  embedding_dim: 128             # Dimension of embeddings
+  num_heads: 8                   # Number of attention heads
+  num_layers: 6                  # Number of transformer layers
+  hidden_dim: 512                # Feed-forward hidden dimension
+  max_seq_length: 512            # Maximum sequence length
+  dropout: 0.1                   # Dropout rate
+
+# Embedding Configuration
+embeddings:
+  # Pre-trained embeddings (optional)
+  pretrained_path: null          # Path to pre-trained embeddings (e.g., GloVe)
+  freeze_embeddings: false       # Whether to freeze embedding weights
+  embedding_dropout: 0.2         # Dropout on embeddings
+
+# Classification Head
+classification:
+  num_classes: 2                 # Number of output classes (positive/negative)
+  hidden_sizes: [128]            # Hidden layer sizes before final classification
+  activation: 'relu'             # Activation function
+  
+# Regularization
+regularization:
+  weight_decay: 0.01             # L2 regularization
+  label_smoothing: 0.1           # Label smoothing factor
+  gradient_clip: 1.0             # Gradient clipping threshold
