@@ -17,11 +17,22 @@ A comprehensive sentiment analysis system built with PyTorch, featuring LSTM mod
 
 ## Performance
 
-| Model | Training Accuracy | Validation Accuracy | Test Accuracy | Training Time | Model Size |
-|-------|------------------|-------------------|---------------|---------------|------------|
-| Basic LSTM | 50% | 49% | 47% | 6 epochs | 4.8M params |
-| **Better LSTM** | **99.67%** | **87.72%** | **81.00%** | 15 epochs | 3.7M params |
-| **Optimized CNN** | **92.10%** | **88.00%** | **83.80%** | 4 epochs | 1.1M params |
+| Model | Test Accuracy | Precision | Recall | F1-Score | Parameters | Efficiency* |
+|-------|---------------|-----------|--------|----------|------------|-------------|
+| **Optimized CNN** | **83.80%** | 84.00% | 83.80% | 83.79% | 1.1M | **0.73** |
+| **Hybrid CNN+LSTM** | 81.10% | 81.20% | 81.10% | 81.10% | 2.2M | 0.37 |
+| **Better LSTM** | 81.00% | 81.00% | 81.00% | 81.00% | 3.7M | 0.22 |
+| **Transformer** | 67.00% | 68.51% | 67.00% | 66.10% | 1.8M | 0.37 |
+| **Improved Transformer** | 51.10% | 26.11% | 51.10% | 34.56% | 7.1M | 0.07 |
+
+*Efficiency = Accuracy per million parameters
+
+### **Winner: Optimized CNN**
+- **Highest accuracy**: 83.80%
+- **Most efficient**: 0.73 accuracy per million parameters
+- **Fastest training**: 4 epochs
+- **Smallest model**: 1.1M parameters
+- **Best balance**: Performance, speed, and efficiency
 
 ## Quick Start
 
@@ -61,6 +72,9 @@ python train_better.py --epochs 15 --batch-size 32
 
 # Train the optimized CNN model (fastest & best accuracy)
 python train_cnn_fast.py --epochs 10 --batch-size 128
+
+# Train the hybrid CNN+LSTM model (combines CNN and LSTM strengths)
+python train_hybrid.py --epochs 15 --batch-size 64
 ```
 
 ### 4. Make Predictions
@@ -79,6 +93,9 @@ python predict.py --checkpoint models/checkpoints/lstm_better.pt --interactive
 
 # Interactive mode with CNN
 python predict.py --checkpoint models/checkpoints/cnn_optimized.pt --interactive
+
+# Interactive mode with Hybrid model
+python predict.py --checkpoint models/checkpoints/hybrid_cnn_lstm.pt --interactive
 ```
 
 ### 5. Start the API Server
@@ -158,6 +175,18 @@ sentiment-analysis/
 - **Best for**: Local pattern recognition and fast inference
 - **Advantages**: Fastest training, smallest model, highest accuracy
 
+### Hybrid CNN+LSTM Model
+- **Architecture**: Combines CNN for local feature extraction with LSTM for sequential processing
+- **Features**:
+  - CNN layers for local pattern detection
+  - LSTM layers for sequential dependencies
+  - Attention mechanism for weighted aggregation
+  - Bidirectional processing
+- **Performance**: 81.10% test accuracy
+- **Training**: 15 epochs, 2.2M parameters
+- **Best for**: When both local patterns and sequential dependencies matter
+- **Advantages**: Combines strengths of both architectures
+
 ### Transformer Model
 - **Architecture**: Transformer encoder
 - **Features**:
@@ -186,7 +215,7 @@ epochs: 15
 early_stopping_patience: 5
 ```
 
-## 📈 Training Process
+## Training Process
 
 ### Data Pipeline
 1. **Text Preprocessing**: HTML removal, lowercase, contraction expansion
@@ -429,7 +458,7 @@ make install-dev
 5. Run the test suite
 6. Submit a pull request
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
