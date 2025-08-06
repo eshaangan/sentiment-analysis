@@ -506,7 +506,7 @@ def create_default_preprocessor() -> TextPreprocessor:
         remove_numbers=False,  # Numbers might be relevant
         remove_stopwords=False,  # Stop words can carry sentiment
         expand_contractions=True,
-        min_word_length=2,
+        min_word_length=1,  # Allow single-letter words like "i"
         max_word_length=50,
     )
 

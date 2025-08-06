@@ -20,7 +20,7 @@ def test_early_stopping_trigger():
     )
     loader = _loader()
     criterion = torch.nn.CrossEntropyLoss()
-    optim = torch.optim.SGD(model.parameters(), lr=0.1)
+    optim = torch.optim.SGD(model.parameters(), lr=0.5)
 
     stopper = EarlyStopping(patience=1, min_delta=0.0, mode="min")
     trainer = Trainer(model, loader, loader, criterion, optim)

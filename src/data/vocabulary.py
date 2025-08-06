@@ -148,11 +148,10 @@ class Vocabulary:
             seq.append(self.word_to_idx[self.SOS_TOKEN])
         for t in tokens:
             if t not in self.word_to_idx:
-                # Dynamically add unseen token to vocabulary
-                new_idx = len(self.word_to_idx)
-                self.word_to_idx[t] = new_idx
-                self.idx_to_word[new_idx] = t
-            seq.append(self.word_to_idx[t])
+                # Use UNK token for unknown words
+                seq.append(self.word_to_idx[self.UNK_TOKEN])
+            else:
+                seq.append(self.word_to_idx[t])
         if add_special_tokens:
             seq.append(self.word_to_idx[self.EOS_TOKEN])
         return seq

@@ -299,7 +299,7 @@ class LSTMModel(BaseModel):
                 # Masked mean pooling
                 mask_expanded = attention_mask.unsqueeze(-1).float()
                 masked_output = lstm_output * mask_expanded
-                seq_lengths = attention_mask.sum(dim=1, keepdim=True).unsqueeze(-1)
+                seq_lengths = attention_mask.sum(dim=1, keepdim=True)
                 pooled = masked_output.sum(dim=1) / (seq_lengths + 1e-8)
             else:
                 pooled = lstm_output.mean(dim=1)
@@ -366,12 +366,6 @@ class LSTMModel(BaseModel):
 
         # Classification
         logits = self.classifier(pooled)  # [batch_size, output_dim]
-        # The test suite expects an extra singleton dimension for certain small
-        # batch-size scenarios (see test_lstm_model_different_pooling). We only
-        # unsqueeze when the batch size is 2 to satisfy that expectation while
-        # leaving the default behaviour unchanged for other cases.
-        if logits.size(0) == 2 and self.config.pooling in {"last", "mean", "max"}:
-            logits = logits.unsqueeze(-1)
         return logits
 
     def get_attention_weights(
@@ -402,7 +396,7 @@ class LSTMModel(BaseModel):
             # Get attention weights
             _, attention_weights = self.attention(lstm_out, attention_mask)
 
-            # Return the raw multi-head attention weights for detailed analysis
+            # Return the full attention weights
             return attention_weights
 
 

@@ -589,7 +589,7 @@ class TestLSTMModel:
             with torch.no_grad():
                 logits = model(input_ids, attention_mask)
 
-            assert logits.shape == (batch_size, output_dim, 1)
+            assert logits.shape == (batch_size, output_dim)
 
     def test_lstm_model_attention_pooling(self):
         """Test LSTMModel with attention pooling."""
@@ -654,8 +654,10 @@ class TestLSTMModel:
 
         assert attention_weights is not None
         assert attention_weights.shape == (batch_size, model.attention.num_heads, seq_len, seq_len)
+        # Check that attention weights sum to 1 across the sequence dimension
+        expected_ones = torch.ones(batch_size, model.attention.num_heads, seq_len, device=attention_weights.device)
         assert torch.allclose(
-            attention_weights.sum(dim=1), torch.ones(batch_size), atol=1e-6
+            attention_weights.sum(dim=-1), expected_ones, atol=1e-6
         )
 
     def test_lstm_model_no_attention_weights(self):
