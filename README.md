@@ -1,8 +1,8 @@
-# 🎬 Sentiment Analysis with PyTorch
+# Sentiment Analysis with PyTorch
 
 A comprehensive sentiment analysis system built with PyTorch, featuring LSTM models, data preprocessing pipelines, and a production-ready API.
 
-## 🌟 Features
+## Features
 
 - **High-Performance Models**: LSTM-based models achieving 81% accuracy on IMDB dataset
 - **Complete Data Pipeline**: Text preprocessing, vocabulary building, and tokenization
@@ -12,14 +12,14 @@ A comprehensive sentiment analysis system built with PyTorch, featuring LSTM mod
 - **Interactive Tools**: Command-line and web-based prediction interfaces
 - **GPU Acceleration**: Apple Silicon (MPS) and CUDA support
 
-## 📊 Performance
+## Performance
 
 | Model | Training Accuracy | Validation Accuracy | Test Accuracy |
 |-------|------------------|-------------------|---------------|
 | Basic LSTM | 50% | 49% | 47% |
 | **Better LSTM** | **99.67%** | **87.72%** | **81%** |
 
-## 🚀 Quick Start
+## Quick Start
 
 ### 1. Setup Environment
 
@@ -77,49 +77,49 @@ python -m uvicorn src.inference.api:app --reload
 # Open http://127.0.0.1:8000/docs in your browser
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 sentiment-analysis/
-├── 📁 src/                          # Source code
-│   ├── 📁 data/                     # Data processing
-│   │   ├── preprocessing.py         # Text preprocessing
-│   │   ├── vocabulary.py           # Vocabulary management
-│   │   ├── tokenization.py         # Tokenization utilities
-│   │   └── dataset.py              # Dataset classes
-│   ├── 📁 models/                   # Model architectures
-│   │   ├── lstm_model.py           # LSTM models
-│   │   ├── cnn_model.py            # CNN models
-│   │   ├── transformer_model.py    # Transformer models
-│   │   └── base_model.py           # Base model class
-│   ├── 📁 training/                 # Training utilities
-│   │   ├── trainer.py              # Training loop
-│   │   ├── schedulers.py           # Learning rate schedulers
-│   │   └── early_stopping.py       # Early stopping
-│   ├── 📁 evaluation/               # Evaluation metrics
-│   │   └── metrics.py              # Classification metrics
-│   └── 📁 inference/                # Inference utilities
-│       ├── predictor.py            # Prediction class
-│       └── api.py                  # FastAPI endpoints
-├── 📁 data/                         # Data storage
-│   ├── raw/                        # Raw datasets
-│   └── processed/                  # Processed datasets
-├── 📁 models/                       # Model storage
-│   ├── checkpoints/                # Trained models
-│   └── vocabulary/                 # Vocabulary files
-├── 📁 scripts/                      # Utility scripts
-│   ├── train.py                    # Training script
-│   ├── demo_vocabulary.py          # Vocabulary demo
-│   └── demo_tokenization.py        # Tokenization demo
-├── 📁 tests/                        # Test suite
-├── 📁 results/                      # Evaluation results
-├── predict.py                      # Prediction script
-├── train_better.py                 # Enhanced training script
-├── simple_evaluate.py              # Evaluation script
-└── requirements.txt                # Dependencies
+├── src/                              # Source code
+│   ├── data/                         # Data processing
+│   │   ├── preprocessing.py          # Text preprocessing
+│   │   ├── vocabulary.py             # Vocabulary management
+│   │   ├── tokenization.py           # Tokenization utilities
+│   │   └── dataset.py                # Dataset classes
+│   ├── models/                       # Model architectures
+│   │   ├── lstm_model.py             # LSTM models
+│   │   ├── cnn_model.py              # CNN models
+│   │   ├── transformer_model.py      # Transformer models
+│   │   └── base_model.py             # Base model class
+│   ├── training/                     # Training utilities
+│   │   ├── trainer.py                # Training loop
+│   │   ├── schedulers.py             # Learning rate schedulers
+│   │   └── early_stopping.py         # Early stopping
+│   ├── evaluation/                   # Evaluation metrics
+│   │   └── metrics.py                # Classification metrics
+│   └── inference/                    # Inference utilities
+│       ├── predictor.py              # Prediction class
+│       └── api.py                    # FastAPI endpoints
+├── data/                             # Data storage
+│   ├── raw/                          # Raw datasets
+│   └── processed/                    # Processed datasets
+├── models/                           # Model storage
+│   ├── checkpoints/                  # Trained models
+│   └── vocabulary/                   # Vocabulary files
+├── scripts/                          # Utility scripts
+│   ├── train.py                      # Training script
+│   ├── demo_vocabulary.py            # Vocabulary demo
+│   └── demo_tokenization.py          # Tokenization demo
+├── tests/                            # Test suite
+├── results/                          # Evaluation results
+├── predict.py                        # Prediction script
+├── train_better.py                   # Enhanced training script
+├── simple_evaluate.py                # Evaluation script
+└── requirements.txt                  # Dependencies
 ```
 
-## 🧠 Model Architectures
+## Model Architectures
 
 ### LSTM Model
 - **Architecture**: Bidirectional LSTM with attention
@@ -144,7 +144,7 @@ sentiment-analysis/
   - Position encoding
   - Feed-forward networks
 
-## 🔧 Configuration
+## Configuration
 
 ### Model Configuration (`config/model_config.yaml`)
 ```yaml
@@ -181,7 +181,7 @@ early_stopping_patience: 5
 5. **Validation**: Regular evaluation on validation set
 6. **Checkpointing**: Save best model states
 
-## 🧪 Testing
+## Testing
 
 Run the comprehensive test suite:
 
@@ -198,7 +198,7 @@ pytest tests/test_models.py
 pytest tests/test_training.py
 ```
 
-## 🌐 API Usage
+## API Usage
 
 ### Start the Server
 ```bash
@@ -241,7 +241,7 @@ curl http://127.0.0.1:8000/health
 ### Interactive Documentation
 Visit `http://127.0.0.1:8000/docs` for interactive API documentation.
 
-## 🎯 Usage Examples
+## Usage Examples
 
 ### Command Line Prediction
 ```bash
@@ -273,7 +273,7 @@ for text, result in zip(texts, results):
     print(f"'{text}': {result['label']} ({result['confidence']:.2%})")
 ```
 
-## 🔍 Evaluation
+## Evaluation
 
 ### Run Evaluation
 ```bash
@@ -295,7 +295,7 @@ Negative    363       126
 Positive     64       447
 ```
 
-## 🛠️ Development
+## Development
 
 ### Code Quality
 ```bash
@@ -327,7 +327,7 @@ make format
 make install-dev
 ```
 
-## 📊 Performance Benchmarks
+## Performance Benchmarks
 
 ### Training Performance
 - **Training Time**: ~15 minutes for 15 epochs
@@ -339,7 +339,7 @@ make install-dev
 - **Batch Prediction**: ~200ms for 100 texts
 - **API Response Time**: ~100ms average
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -362,7 +362,7 @@ make install-dev
    ls -la models/checkpoints/
    ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -374,20 +374,6 @@ make install-dev
 ## 📝 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 🙏 Acknowledgments
-
-- **IMDB Dataset**: Large Movie Review Dataset for sentiment analysis
-- **PyTorch**: Deep learning framework
-- **FastAPI**: Modern web framework for APIs
-- **NLTK**: Natural language processing toolkit
-
-## 📞 Support
-
-For questions and support:
-- Open an issue on GitHub
-- Check the documentation
-- Review the test examples
 
 ---
 
