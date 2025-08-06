@@ -20,7 +20,7 @@ from src.data.dataset import load_sentiment_data
 from src.data.preprocessing import create_default_preprocessor
 from src.data.tokenization import create_tokenizer
 from src.data.vocabulary import create_vocabulary_from_data
-from src.models.factory import create_model_from_config
+from src.models.factory import create_model_from_yaml
 from src.training.early_stopping import EarlyStopping
 from src.training.schedulers import create_scheduler
 from src.training.trainer import Trainer
@@ -107,16 +107,19 @@ def main():
 
     # Load data
     logger.info("Loading datasets...")
-    train_loader, val_loader, test_loader = load_sentiment_data(
-        train_csv_path=train_path,
-        test_csv_path=test_path,
-        tokenizer=tokenizer,
+    train_loader, val_loader, test_loader, _ = load_sentiment_data(
+        data_path=train_path,
+        vocabulary=vocabulary,
+        preprocessor=preprocessor,
+        text_column=training_config["dataset"]["text_column"],
+        label_column=training_config["dataset"]["label_column"],
+        max_length=training_config["dataset"]["max_length"],
         batch_size=training_config["training"]["batch_size"],
-        val_batch_size=training_config["training"]["val_batch_size"],
-        train_split=training_config["dataset"]["train_split"],
-        val_split=training_config["dataset"]["val_split"],
+        train_ratio=training_config["dataset"]["train_split"],
+        val_ratio=training_config["dataset"]["val_split"],
+        test_ratio=1.0 - training_config["dataset"]["train_split"] - training_config["dataset"]["val_split"],
         num_workers=training_config["hardware"]["num_workers"],
-        pin_memory=training_config["hardware"]["pin_memory"],
+        random_seed=args.seed,
     )
 
     logger.info(f"Train batches: {len(train_loader)}")
@@ -129,7 +132,20 @@ def main():
 
     # Create model
     logger.info(f"Creating {args.model_type} model...")
-    model = create_model_from_config(model_config, args.model_type)
+    if args.model_type == "lstm":
+        from src.models.lstm_model import LSTMConfig, LSTMModel
+        config = LSTMConfig(**model_config[args.model_type])
+        model = LSTMModel(config)
+    elif args.model_type == "cnn":
+        from src.models.cnn_model import CNNConfig, CNNModel
+        config = CNNConfig(**model_config[args.model_type])
+        model = CNNModel(config)
+    elif args.model_type == "transformer":
+        from src.models.transformer_model import TransformerConfig, TransformerModel
+        config = TransformerConfig(**model_config[args.model_type])
+        model = TransformerModel(config)
+    else:
+        raise ValueError(f"Unsupported model type: {args.model_type}")
     logger.info(f"Model parameters: {model.count_parameters():,}")
 
     # Create optimizer
@@ -167,7 +183,7 @@ def main():
     if "scheduler" in training_config["training"]:
         scheduler = create_scheduler(
             optimizer,
-            scheduler_type=training_config["training"]["scheduler"]["type"],
+            name=training_config["training"]["scheduler"]["type"],
             **training_config["training"]["scheduler"],
         )
 

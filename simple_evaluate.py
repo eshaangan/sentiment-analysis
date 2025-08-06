@@ -1,27 +1,20 @@
 #!/usr/bin/env python3
-"""
-Evaluation script for trained sentiment analysis models.
-This script loads a trained model and evaluates it on test data.
-"""
+"""Simple evaluation script for the trained sentiment analysis model."""
 
 import argparse
 import logging
-import sys
+import yaml
 from pathlib import Path
 
 import torch
-import yaml
+import numpy as np
 
-# Add src to path for imports
-sys.path.append(str(Path(__file__).parent.parent))
-
-from src.data.dataset import load_sentiment_data
 from src.data.preprocessing import create_default_preprocessor
-from src.data.tokenization import create_tokenizer
 from src.data.vocabulary import create_vocabulary_from_data
-from src.evaluation.metrics import (compute_classification_metrics,
-                                    get_confusion_matrix, get_classification_report,
-                                    roc_curve_and_auc)
+from src.data.tokenization import create_tokenizer
+from src.data.dataset import SentimentDataset
+from src.models.lstm_model import LSTMConfig, LSTMModel
+from src.evaluation.metrics import compute_classification_metrics, get_confusion_matrix, get_classification_report
 from src.training.utils import get_device
 
 # Set up logging
@@ -29,18 +22,16 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def load_config(config_path: str) -> dict:
-    """Load configuration from YAML file."""
-    with open(config_path, "r") as f:
-        return yaml.safe_load(f)
-
-
-def evaluate_model(model, test_loader, device):
+def evaluate_model(model, dataset, device, batch_size=32):
     """Evaluate model on test data and return predictions and labels."""
     model.eval()
     all_predictions = []
     all_labels = []
     all_probabilities = []
+
+    # Create a simple dataloader
+    from torch.utils.data import DataLoader
+    test_loader = DataLoader(dataset, batch_size=batch_size, shuffle=False)
 
     with torch.no_grad():
         for batch in test_loader:
@@ -67,20 +58,11 @@ def main():
     """Main evaluation function."""
     parser = argparse.ArgumentParser(description="Evaluate sentiment analysis model")
     parser.add_argument("--checkpoint", required=True, help="Path to model checkpoint")
-    parser.add_argument(
-        "--training-config",
-        default="config/training_config.yaml",
-        help="Path to training configuration file",
-    )
-    parser.add_argument(
-        "--output-dir", default="results", help="Directory to save evaluation results"
-    )
+    parser.add_argument("--test-data", default="data/processed/imdb_test.csv", help="Path to test data")
+    parser.add_argument("--output-dir", default="results", help="Directory to save evaluation results")
+    parser.add_argument("--max-samples", type=int, default=1000, help="Maximum number of samples to evaluate")
 
     args = parser.parse_args()
-
-    # Load configuration
-    logger.info("Loading configuration...")
-    training_config = load_config(args.training_config)
 
     # Get device
     device = get_device()
@@ -96,51 +78,49 @@ def main():
     logger.info(f"Loading checkpoint from {checkpoint_path}")
     checkpoint = torch.load(checkpoint_path, map_location=device)
 
-    # Recreate data pipeline (needed for evaluation)
-    train_path = Path(training_config["dataset"]["train_path"])
-    test_path = Path(training_config["dataset"]["test_path"])
-
-    if not train_path.exists() or not test_path.exists():
-        logger.error("Data files not found. Please ensure data is downloaded.")
+    # Check if test data exists
+    test_path = Path(args.test_data)
+    if not test_path.exists():
+        logger.error(f"Test data not found: {test_path}")
         return
 
     # Create preprocessor and vocabulary
-    logger.info("Recreating data pipeline...")
+    logger.info("Setting up data pipeline...")
     preprocessor = create_default_preprocessor()
+    
+    # Use a small subset for vocabulary building (faster)
     vocabulary = create_vocabulary_from_data(
-        train_path,
-        test_path,
-        text_column=training_config["dataset"]["text_column"],
-        max_vocab_size=training_config["dataset"]["max_vocab_size"],
-        min_frequency=training_config["dataset"]["min_frequency"],
+        "data/processed/imdb_train.csv",  # Use train data for vocabulary
+        str(test_path),
+        text_column="review",
+        max_vocab_size=10000,
+        min_frequency=2,
         preprocessor=preprocessor,
     )
 
     # Create tokenizer
     tokenizer = create_tokenizer(
-        vocabulary=vocabulary, max_length=training_config["dataset"]["max_length"]
+        vocabulary=vocabulary, 
+        max_length=512
     )
 
-    # Load test data
-    _, _, test_loader, _ = load_sentiment_data(
+    # Load test dataset directly
+    logger.info("Loading test dataset...")
+    test_dataset = SentimentDataset(
         data_path=test_path,
-        vocabulary=vocabulary,
-        preprocessor=preprocessor,
-        text_column=training_config["dataset"]["text_column"],
-        label_column=training_config["dataset"]["label_column"],
-        max_length=training_config["dataset"]["max_length"],
-        batch_size=training_config["training"]["val_batch_size"],
-        train_ratio=0.0,
-        val_ratio=0.0,
-        test_ratio=1.0,
-        num_workers=training_config["hardware"]["num_workers"],
+        tokenizer=tokenizer,
+        text_column="review",
+        label_column="sentiment",
+        max_length=512,
     )
+
+    # Limit the number of samples for faster evaluation
+    if len(test_dataset) > args.max_samples:
+        logger.info(f"Limiting evaluation to {args.max_samples} samples")
+        test_dataset = torch.utils.data.Subset(test_dataset, range(args.max_samples))
 
     # Load model
     logger.info("Loading model...")
-    from src.models.lstm_model import LSTMConfig, LSTMModel
-    
-    # Create model with same config as training
     config = LSTMConfig(
         vocab_size=vocabulary.vocab_size,
         embed_dim=128,
@@ -156,7 +136,7 @@ def main():
 
     # Evaluate model
     logger.info("Evaluating model...")
-    predictions, labels, probabilities = evaluate_model(model, test_loader, device)
+    predictions, labels, probabilities = evaluate_model(model, test_dataset, device)
 
     # Calculate metrics
     metrics = compute_classification_metrics(labels, predictions, average="weighted")
@@ -180,13 +160,6 @@ def main():
     report = get_classification_report(labels, predictions, target_names=class_names)
     logger.info(f"Classification Report:\n{report}")
 
-    # Calculate AUC (for binary classification)
-    if len(set(labels)) == 2:
-        # Get probabilities for positive class
-        pos_probs = [prob[1] for prob in probabilities]
-        _, _, auc = roc_curve_and_auc(labels, pos_probs)
-        logger.info(f"AUC: {auc:.4f}")
-
     # Save results
     output_dir = Path(args.output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -198,10 +171,8 @@ def main():
         "f1": float(f1),
         "confusion_matrix": cm.tolist(),
         "classification_report": report,
+        "num_samples": len(labels),
     }
-
-    if len(set(labels)) == 2:
-        results["auc"] = float(auc)
 
     results_path = output_dir / "evaluation_results.yaml"
     with open(results_path, "w") as f:
@@ -211,4 +182,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main() 

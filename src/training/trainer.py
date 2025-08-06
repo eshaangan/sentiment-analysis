@@ -62,7 +62,11 @@ class Trainer:
             self.train_loader, disable=not self.progress_bar, desc="Train", leave=False
         )
         for batch in iterator:
-            input_ids, labels = batch[0].to(self.device), batch[1].to(self.device)
+            if isinstance(batch, dict):
+                input_ids = batch["input_ids"].to(self.device)
+                labels = batch["labels"].to(self.device)
+            else:
+                input_ids, labels = batch[0].to(self.device), batch[1].to(self.device)
             self.optimizer.zero_grad(set_to_none=True)
             logits = self.model(input_ids)
             loss = self.criterion(logits, labels)
@@ -95,7 +99,11 @@ class Trainer:
 
             iterator = tqdm(self.val_loader, disable=False, desc="Eval", leave=False)
         for batch in iterator:
-            input_ids, labels = batch[0].to(self.device), batch[1].to(self.device)
+            if isinstance(batch, dict):
+                input_ids = batch["input_ids"].to(self.device)
+                labels = batch["labels"].to(self.device)
+            else:
+                input_ids, labels = batch[0].to(self.device), batch[1].to(self.device)
             logits = self.model(input_ids)
             loss = self.criterion(logits, labels)
             total_loss += loss.item() * labels.size(0)
