@@ -1,10 +1,10 @@
-# 🚀 Transformer Model Improvement Results
+# Transformer Model Improvement Results
 
-## 📊 **Summary of All Strategies**
+## **Summary of All Strategies**
 
 We successfully implemented and tested **3 different strategies** to improve the Transformer model's performance on sentiment analysis. Here are the results:
 
-## 🎯 **Strategy 1: Pre-trained Embeddings** ✅ **SUCCESS**
+## **Strategy 1: Pre-trained Embeddings** **SUCCESS**
 
 ### **Implementation:**
 - Created `train_transformer_pretrained.py`
@@ -17,14 +17,14 @@ We successfully implemented and tested **3 different strategies** to improve the
 - **Improvement:** +11.2% accuracy
 
 ### **Key Benefits:**
-- ✅ **Easy to implement**
-- ✅ **Significant improvement**
-- ✅ **Fast training**
-- ✅ **No additional data needed**
+- **Easy to implement**
+- **Significant improvement**
+- **Fast training**
+- **No additional data needed**
 
 ---
 
-## 🎯 **Strategy 2: Data Augmentation** ✅ **BEST RESULT**
+## **Strategy 2: Data Augmentation** **BEST RESULT**
 
 ### **Implementation:**
 - Created `src/data/augmentation.py` with NLTK-based augmentation
@@ -38,14 +38,14 @@ We successfully implemented and tested **3 different strategies** to improve the
 - **Improvement:** +18.0% accuracy
 
 ### **Key Benefits:**
-- ✅ **Best performance improvement**
-- ✅ **More robust model**
-- ✅ **Better generalization**
-- ✅ **Reduces overfitting**
+- **Best performance improvement**
+- **More robust model**
+- **Better generalization**
+- **Reduces overfitting**
 
 ---
 
-## 🎯 **Strategy 3: BERT Transfer Learning** ✅ **SUCCESS**
+## **Strategy 3: BERT Transfer Learning** **SUCCESS**
 
 ### **Implementation:**
 - Created `train_transformer_bert.py` and `train_transformer_bert_simple.py`
@@ -57,13 +57,13 @@ We successfully implemented and tested **3 different strategies** to improve the
 - **Precision/Recall/F1**: 85.03% / 85.00% / 84.99%
 
 ### **Notes:**
-- ✅ Simplified BERT-like embeddings avoid slow positional init
-- ✅ Trains reliably on MPS with batch size 32
-- ⚠️ Full BERT init path remains heavier; simplified path recommended
+- Simplified BERT-like embeddings avoid slow positional init
+- Trains reliably on MPS with batch size 32
+- Full BERT init path remains heavier; simplified path recommended
 
 ---
 
-## 🏆 **Final Model Comparison**
+## **Final Model Comparison**
 
 | Model | Test Accuracy | Precision | Recall | F1-Score | Parameters | Training Time |
 |-------|---------------|-----------|--------|----------|------------|---------------|
@@ -74,7 +74,7 @@ We successfully implemented and tested **3 different strategies** to improve the
 
 ---
 
-## 🎯 **Recommendations**
+## **Recommendations**
 
 ### **🥇 Best Strategies: Data Augmentation / BERT-like (tie)**
 - **Highest accuracy:** 85.0% (tie)
@@ -93,7 +93,7 @@ We successfully implemented and tested **3 different strategies** to improve the
 
 ---
 
-## 📈 **Performance Analysis**
+## **Performance Analysis**
 
 ### **Accuracy Improvements:**
 1. **Data Augmentation:** +18.0% (67% → 85%)
@@ -108,7 +108,7 @@ We successfully implemented and tested **3 different strategies** to improve the
 
 ---
 
-## 🔧 **Implementation Files Created**
+## **Implementation Files Created**
 
 ### **Training Scripts:**
 - `train_transformer_pretrained.py` - Pre-trained embeddings
@@ -130,7 +130,7 @@ We successfully implemented and tested **3 different strategies** to improve the
 
 ---
 
-## 🎉 **Conclusion**
+## **Conclusion**
 
 **Data Augmentation emerged as the clear winner**, providing the best balance of:
 - **Performance:** 85.0% accuracy (highest)
@@ -142,7 +142,7 @@ The Transformer model went from being the **worst performer** (67.0%) to being *
 
 ---
 
-## 🚀 **Next Steps**
+## **Next Steps**
 
 1. **Use the augmented Transformer model** for production
 2. **Combine strategies** (augmentation + pre-trained embeddings)

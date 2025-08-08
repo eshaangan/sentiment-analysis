@@ -27,7 +27,7 @@ def load_evaluation_results():
             with open(file_path, 'r') as f:
                 models[model_name] = yaml.safe_load(f)
         else:
-            print(f"⚠️  Missing results for {model_name}: {filename}")
+            print(f"Missing results for {model_name}: {filename}")
     
     return models
 
@@ -53,7 +53,7 @@ def create_comparison_table(models):
 
 def print_comparison(data):
     """Print the comparison table."""
-    print("🏆 SENTIMENT ANALYSIS MODEL COMPARISON")
+    print("SENTIMENT ANALYSIS MODEL COMPARISON")
     print("=" * 80)
     print()
     
@@ -72,7 +72,7 @@ def print_comparison(data):
     print()
     
     # Performance analysis
-    print("📊 PERFORMANCE ANALYSIS:")
+    print("PERFORMANCE ANALYSIS:")
     print("-" * 40)
     
     accuracies = [(row['Model'], float(row['Accuracy'])) for row in data]
@@ -98,14 +98,14 @@ def print_comparison(data):
     
     efficiency_data.sort(key=lambda x: x[3], reverse=True)
     
-    print("🎯 Most Efficient Models (Accuracy per Million Parameters):")
+    print("Most Efficient Models (Accuracy per Million Parameters):")
     for i, (model, acc, params, eff) in enumerate(efficiency_data[:3], 1):
         print(f"   {i}. {model}: {eff:.2f} (Acc: {acc:.3f}, Params: {params:,})")
     
     print()
     
     # Model type analysis
-    print("🏗️  ARCHITECTURE ANALYSIS:")
+    print("ARCHITECTURE ANALYSIS:")
     print("-" * 40)
     
     cnn_models = [row for row in data if 'CNN' in row['Model']]
@@ -113,7 +113,7 @@ def print_comparison(data):
     transformer_models = [row for row in data if 'Transformer' in row['Model']]
     hybrid_models = [row for row in data if 'Hybrid' in row['Model']]
     
-    print("📈 CNN Models:")
+    print("CNN Models:")
     for model in cnn_models:
         print(f"   • {model['Model']}: {model['Accuracy']} accuracy")
     
@@ -146,19 +146,19 @@ def save_comparison_to_markdown(data):
 
 ## Key Findings
 
-### 🏆 Best Performing Model
+### Best Performing Model
 The **{}** achieved the highest accuracy of **{}** with an F1-score of **{}**.
 
 ### ⚡ Most Efficient Model
 Based on accuracy per million parameters, the most efficient model is **{}**.
 
-### 🏗️ Architecture Insights
+### Architecture Insights
 - **CNN models** excel at local pattern detection and are computationally efficient
 - **LSTM models** capture sequential dependencies but require more parameters
 - **Transformer models** struggled with this dataset size and complexity
 - **Hybrid models** combine the strengths of multiple architectures
 
-### 📊 Recommendations
+### Recommendations
 1. **Production Use**: Use the **{}** for production sentiment analysis
 2. **Resource Constraints**: Consider **{}** for limited computational resources
 3. **Research**: The **{}** shows promise for future improvements
@@ -187,14 +187,14 @@ Based on accuracy per million parameters, the most efficient model is **{}**.
 
 def main():
     """Main function to run the comparison."""
-    print("🔍 Loading model evaluation results...")
+    print("Loading model evaluation results...")
     models = load_evaluation_results()
     
     if not models:
-        print("❌ No evaluation results found!")
+        print("No evaluation results found!")
         return
     
-    print(f"✅ Loaded results for {len(models)} models")
+    print(f"Loaded results for {len(models)} models")
     print()
     
     # Create comparison table

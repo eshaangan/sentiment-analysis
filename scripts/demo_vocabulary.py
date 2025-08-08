@@ -36,14 +36,14 @@ def demo_basic_vocabulary():
     print(f"Sample: '{sample_texts[0]}'")
 
     # Create vocabulary with different settings
-    print("\n🔧 CREATING VOCABULARIES WITH DIFFERENT SETTINGS")
+    print("\nCREATING VOCABULARIES WITH DIFFERENT SETTINGS")
     print("-" * 60)
 
     # Basic vocabulary
     vocab_basic = Vocabulary(min_frequency=1, max_vocab_size=50)
     vocab_basic.build_from_texts(sample_texts)
 
-    print(f"\n📊 Basic Vocabulary Stats:")
+    print(f"\nBasic Vocabulary Stats:")
     stats = vocab_basic.get_vocabulary_stats()
     for key, value in stats.items():
         print(f"  {key}: {value}")
@@ -53,7 +53,7 @@ def demo_basic_vocabulary():
     vocab_preprocessed = Vocabulary(min_frequency=1, max_vocab_size=50)
     vocab_preprocessed.build_from_texts(sample_texts, preprocessor)
 
-    print(f"\n📊 Preprocessed Vocabulary Stats:")
+    print(f"\nPreprocessed Vocabulary Stats:")
     stats_prep = vocab_preprocessed.get_vocabulary_stats()
     for key, value in stats_prep.items():
         print(f"  {key}: {value}")
@@ -109,7 +109,7 @@ def demo_imdb_vocabulary():
 
     # Check if data exists
     if not Path(train_path).exists() or not Path(test_path).exists():
-        print("❌ IMDB data not found. Please run the data download script first.")
+        print("IMDB data not found. Please run the data download script first.")
         print("   Run: python src/data/download_data.py")
         return None
 
@@ -121,7 +121,7 @@ def demo_imdb_vocabulary():
     preprocessor = create_default_preprocessor()
 
     # Build vocabulary with different configurations
-    print(f"\n🔧 TESTING DIFFERENT VOCABULARY CONFIGURATIONS")
+    print(f"\nTESTING DIFFERENT VOCABULARY CONFIGURATIONS")
     print("-" * 60)
 
     configs = [
@@ -133,7 +133,7 @@ def demo_imdb_vocabulary():
     vocabularies = {}
 
     for config in configs:
-        print(f"\n📝 Building {config['name']} vocabulary...")
+        print(f"\nBuilding {config['name']} vocabulary...")
         print(
             f"   Max size: {config['max_vocab_size']}, Min frequency: {config['min_frequency']}"
         )
@@ -150,15 +150,15 @@ def demo_imdb_vocabulary():
 
         # Show statistics
         stats = vocab.get_vocabulary_stats()
-        print(f"   📊 Final vocabulary size: {stats['vocab_size']}")
-        print(f"   📊 Content words: {stats['content_words']}")
-        print(f"   📊 Total unique words seen: {stats['total_unique_words']}")
+        print(f"   Final vocabulary size: {stats['vocab_size']}")
+        print(f"   Content words: {stats['content_words']}")
+        print(f"   Total unique words seen: {stats['total_unique_words']}")
         print(
-            f"   📊 Words filtered: {stats['total_unique_words'] - stats['content_words']}"
+            f"   Words filtered: {stats['total_unique_words'] - stats['content_words']}"
         )
 
     # Compare vocabularies
-    print(f"\n📊 VOCABULARY COMPARISON")
+    print(f"\nVOCABULARY COMPARISON")
     print("-" * 60)
     print(f"{'Config':<8} {'Size':<6} {'Coverage':<10} {'Most Common Word'}")
     print("-" * 60)
@@ -176,7 +176,7 @@ def demo_imdb_vocabulary():
         )
 
     # Test vocabulary on sample reviews
-    print(f"\n🧪 TESTING VOCABULARY ON SAMPLE REVIEWS")
+    print(f"\nTESTING VOCABULARY ON SAMPLE REVIEWS")
     print("-" * 60)
 
     # Use medium vocabulary for testing
@@ -233,11 +233,11 @@ def demo_vocabulary_features():
     vocab = Vocabulary(min_frequency=2, max_vocab_size=20)
     vocab.build_from_texts(texts)
 
-    print(f"📊 Vocabulary built from {len(texts)} sentences")
-    print(f"📊 Vocabulary size: {vocab.vocab_size}")
+    print(f"Vocabulary built from {len(texts)} sentences")
+    print(f"Vocabulary size: {vocab.vocab_size}")
 
     # Word frequency analysis
-    print(f"\n🔍 WORD FREQUENCY ANALYSIS")
+    print(f"\nWORD FREQUENCY ANALYSIS")
     print("-" * 60)
 
     test_words = ["excellent", "movie", "the", "terrible", "amazing"]
@@ -247,7 +247,7 @@ def demo_vocabulary_features():
         print(f"'{word}': frequency={freq}, in_vocab={in_vocab}")
 
     # Special token demonstration
-    print(f"\n🏷️ SPECIAL TOKENS")
+    print(f"\nSPECIAL TOKENS")
     print("-" * 60)
 
     special_tokens = [
@@ -301,8 +301,8 @@ def demo_vocabulary_features():
 
 def main():
     """Run all vocabulary demonstrations."""
-    print("🎬 VOCABULARY BUILDING SYSTEM DEMONSTRATION")
-    print("📝 This script demonstrates the vocabulary building capabilities")
+    print("VOCABULARY BUILDING SYSTEM DEMONSTRATION")
+    print("This script demonstrates the vocabulary building capabilities")
     print("    for sentiment analysis with movie review data.")
 
     # Basic vocabulary demo
@@ -315,9 +315,9 @@ def main():
     demo_vocabulary_features()
 
     print("\n" + "=" * 80)
-    print("✅ VOCABULARY DEMONSTRATION COMPLETE")
+    print("VOCABULARY DEMONSTRATION COMPLETE")
     print("=" * 80)
-    print("\n💡 Key Features Demonstrated:")
+    print("\nKey Features Demonstrated:")
     print("• Vocabulary building from text data")
     print("• Frequency-based word filtering")
     print("• Vocabulary size limiting")
@@ -328,7 +328,7 @@ def main():
     print("• Vocabulary persistence (save/load)")
     print("• Real-world IMDB dataset processing")
 
-    print("\n🚀 Ready for tokenization and PyTorch Dataset creation!")
+    print("\nReady for tokenization and PyTorch Dataset creation!")
 
 
 if __name__ == "__main__":

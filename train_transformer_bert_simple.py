@@ -147,7 +147,7 @@ def main():
             model.position_embedding.weight.copy_(position_embeddings[:args.max_length])
     
     model.to(device)
-    logger.info("✅ Simplified BERT-like embeddings initialized")
+    logger.info("Simplified BERT-like embeddings initialized")
 
     # Create optimizer and scheduler
     optimizer = AdamW(

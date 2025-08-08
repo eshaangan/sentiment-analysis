@@ -127,7 +127,7 @@ def main():
             vocabulary.vocab_size, args.embed_dim, device
         )
         model.embedding.weight.data.copy_(pretrained_embeddings)
-        logger.info("✅ Pre-trained embeddings initialized")
+        logger.info("Pre-trained embeddings initialized")
     
     logger.info(f"Model parameters: {model.count_parameters():,}")
     

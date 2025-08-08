@@ -89,7 +89,7 @@ class SentimentDataset(Dataset):
         else:
             raise ValueError(f"Unsupported file format: {self.data_path.suffix}")
 
-        print(f"✅ Loaded {len(data)} samples")
+        print(f"Loaded {len(data)} samples")
 
         # Validate required columns
         if self.text_column not in data.columns:
@@ -119,7 +119,7 @@ class SentimentDataset(Dataset):
             # Multi-class classification
             mapping = {label: idx for idx, label in enumerate(sorted(unique_labels))}
 
-        print(f"📋 Label mapping created: {mapping}")
+        print(f"Label mapping created: {mapping}")
         return mapping
 
     def _process_data(self) -> List[Dict[str, Any]]:
@@ -176,15 +176,15 @@ class SentimentDataset(Dataset):
             except Exception as e:
                 if self.filter_invalid:
                     invalid_count += 1
-                    print(f"⚠️ Error processing sample {idx}: {e}")
+                    print(f"Error processing sample {idx}: {e}")
                     continue
                 else:
                     raise
 
         if invalid_count > 0:
-            print(f"⚠️ Filtered out {invalid_count} invalid samples")
+            print(f"Filtered out {invalid_count} invalid samples")
 
-        print(f"✅ Processed {len(samples)} valid samples")
+        print(f"Processed {len(samples)} valid samples")
         return samples
 
     def _setup_cache(self):
@@ -304,7 +304,7 @@ class SentimentDataset(Dataset):
                     },
                     f,
                 )
-            print("✅ Cache saved successfully")
+            print("Cache saved successfully")
 
     def load_cache(self, file_path: Optional[Union[str, Path]] = None) -> bool:
         """Load processed samples from cache file."""
@@ -324,13 +324,13 @@ class SentimentDataset(Dataset):
 
                     self.samples = cached_data["samples"]
                     self.label_mapping = cached_data["label_mapping"]
-                    print("✅ Cache loaded successfully")
+                    print("Cache loaded successfully")
                     return True
                 else:
-                    print("⚠️ Cache incompatible with current settings")
+                    print("Cache incompatible with current settings")
                     return False
             except Exception as e:
-                print(f"❌ Error loading cache: {e}")
+                print(f"Error loading cache: {e}")
                 return False
         return False
 
@@ -367,7 +367,7 @@ class DatasetSplitter:
         val_size = int(val_ratio * total_size)
         test_size = total_size - train_size - val_size
 
-        print(f"📊 Splitting dataset: {total_size} total samples")
+        print(f"Splitting dataset: {total_size} total samples")
         print(f"   Training: {train_size} samples ({train_ratio:.1%})")
         print(f"   Validation: {val_size} samples ({val_ratio:.1%})")
         print(f"   Test: {test_size} samples ({test_ratio:.1%})")
@@ -504,7 +504,7 @@ def load_sentiment_data(
     """
     from src.data.tokenization import create_tokenizer
 
-    print("🚀 Loading sentiment analysis data pipeline...")
+    print("Loading sentiment analysis data pipeline...")
 
     # Create tokenizer
     tokenizer = create_tokenizer(
@@ -544,7 +544,7 @@ def load_sentiment_data(
         num_workers=num_workers,
     )
 
-    print("✅ Data loading pipeline complete!")
+    print("Data loading pipeline complete!")
 
     return train_loader, val_loader, test_loader, dataset
 

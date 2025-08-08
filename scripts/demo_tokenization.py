@@ -28,7 +28,7 @@ def demo_basic_tokenization():
     print("=" * 80)
 
     # Create sample vocabulary
-    print("🔧 Creating vocabulary from movie reviews...")
+    print("Creating vocabulary from movie reviews...")
     vocab = Vocabulary(min_frequency=1, max_vocab_size=100)
     sample_texts = [
         "This movie is absolutely amazing and fantastic!",
@@ -43,10 +43,10 @@ def demo_basic_tokenization():
     preprocessor = create_default_preprocessor()
     vocab.build_from_texts(sample_texts, preprocessor)
 
-    print(f"✅ Vocabulary created with {vocab.vocab_size} words")
+    print(f"Vocabulary created with {vocab.vocab_size} words")
 
     # Create tokenizer
-    print(f"\n🎯 Creating tokenizer with max_length=20...")
+    print(f"\nCreating tokenizer with max_length=20...")
     tokenizer = Tokenizer(
         vocabulary=vocab,
         preprocessor=preprocessor,
@@ -55,7 +55,7 @@ def demo_basic_tokenization():
         add_special_tokens=True,
     )
 
-    print(f"✅ Tokenizer created")
+    print(f"Tokenizer created")
     print(f"   Vocab size: {tokenizer.get_vocab_size()}")
     print(f"   Special tokens: {tokenizer.get_special_tokens_dict()}")
 
@@ -64,7 +64,7 @@ def demo_basic_tokenization():
 
 def demo_single_text_encoding(tokenizer):
     """Demonstrate encoding single text."""
-    print(f"\n📝 SINGLE TEXT ENCODING")
+    print(f"\nSINGLE TEXT ENCODING")
     print("-" * 60)
 
     test_texts = [
@@ -75,7 +75,7 @@ def demo_single_text_encoding(tokenizer):
     ]
 
     for i, text in enumerate(test_texts, 1):
-        print(f"\n🎬 Example {i}: '{text}'")
+        print(f"\nExample {i}: '{text}'")
 
         # Get sequence length
         seq_length = tokenizer.get_sequence_length(text)
@@ -114,18 +114,18 @@ def demo_batch_encoding(tokenizer):
         "The cinematography was stunning but the story was weak.",
     ]
 
-    print(f"🎬 Encoding batch of {len(batch_texts)} texts:")
+    print(f"Encoding batch of {len(batch_texts)} texts:")
     for i, text in enumerate(batch_texts):
         print(f"   {i+1}. '{text}' (length: {len(text.split())} words)")
 
     # Encode batch
     encoded_batch = tokenizer.encode(batch_texts, return_tensors="pt")
 
-    print(f"\n📊 Batch encoding results:")
+    print(f"\nBatch encoding results:")
     print(f"   Input IDs shape: {encoded_batch['input_ids'].shape}")
     print(f"   Attention mask shape: {encoded_batch['attention_mask'].shape}")
 
-    print(f"\n🔍 Detailed batch analysis:")
+    print(f"\nDetailed batch analysis:")
     for i, text in enumerate(batch_texts):
         input_ids = encoded_batch["input_ids"][i]
         attention_mask = encoded_batch["attention_mask"][i]
@@ -162,7 +162,7 @@ def demo_padding_strategies(tokenizer):
         "This is a much longer text that will demonstrate padding behavior",
     ]
 
-    print(f"🎬 Test texts:")
+    print(f"Test texts:")
     for i, text in enumerate(test_texts):
         length = tokenizer.get_sequence_length(text)
         print(f"   {i+1}. '{text}' (length: {length})")
@@ -196,12 +196,12 @@ def demo_padding_strategies(tokenizer):
 
 def demo_truncation(tokenizer):
     """Demonstrate text truncation."""
-    print(f"\n✂️ TEXT TRUNCATION")
+    print(f"\nTEXT TRUNCATION")
     print("-" * 60)
 
     long_text = "This is an extremely long movie review that goes on and on about every single detail of the film including the acting performances cinematography music direction plot character development special effects and much more than anyone really wants to read in a single review"
 
-    print(f"📝 Original text: '{long_text}'")
+    print(f"Original text: '{long_text}'")
     print(f"   Word count: {len(long_text.split())} words")
     print(f"   Full sequence length: {tokenizer.get_sequence_length(long_text)}")
 
@@ -258,7 +258,7 @@ def demo_sequence_collator():
     # Collate batch
     collated = collator(sample_batch)
 
-    print(f"\n📊 Collated batch:")
+    print(f"\nCollated batch:")
     print(f"   Input IDs shape: {collated['input_ids'].shape}")
     print(f"   Attention mask shape: {collated['attention_mask'].shape}")
     print(f"   Labels shape: {collated['labels'].shape}")
@@ -280,7 +280,7 @@ def demo_sequence_collator():
 
 def demo_sequence_analysis():
     """Demonstrate sequence length analysis."""
-    print(f"\n📊 SEQUENCE LENGTH ANALYSIS")
+    print(f"\nSEQUENCE LENGTH ANALYSIS")
     print("-" * 60)
 
     # Create vocabulary and tokenizer
@@ -299,11 +299,11 @@ def demo_sequence_analysis():
     tokenizer = create_tokenizer(vocab, preprocessor, max_length=50)
 
     # Analyze sequence lengths
-    print(f"🔍 Analyzing {len(sample_texts)} sample texts...")
+    print(f"Analyzing {len(sample_texts)} sample texts...")
 
     stats = analyze_sequence_lengths(sample_texts, tokenizer)
 
-    print(f"\n📈 Sequence Length Statistics:")
+    print(f"\nSequence Length Statistics:")
     print(f"   Count: {stats['count']}")
     print(f"   Mean: {stats['mean']:.2f}")
     print(f"   Std: {stats['std']:.2f}")
@@ -315,19 +315,19 @@ def demo_sequence_analysis():
     print(f"   99th percentile: {stats['percentile_99']:.1f}")
 
     # Show individual lengths
-    print(f"\n📝 Individual sequence lengths:")
+    print(f"\nIndividual sequence lengths:")
     for i, text in enumerate(sample_texts):
         length = tokenizer.get_sequence_length(text)
         print(f"   {i+1}. Length {length:2d}: '{text}'")
 
     # Recommendation for max_length
     recommended_max = int(stats["percentile_95"])
-    print(f"\n💡 Recommended max_length: {recommended_max} (covers 95% of sequences)")
+    print(f"\nRecommended max_length: {recommended_max} (covers 95% of sequences)")
 
 
 def demo_utility_functions():
     """Demonstrate utility functions."""
-    print(f"\n🛠️ UTILITY FUNCTIONS")
+    print(f"\nUTILITY FUNCTIONS")
     print("-" * 60)
 
     # Create test data
@@ -338,7 +338,7 @@ def demo_utility_functions():
     preprocessor = create_default_preprocessor()
 
     # Test create_sequences_from_texts
-    print(f"📝 Testing create_sequences_from_texts...")
+    print(f"Testing create_sequences_from_texts...")
 
     sample_texts = ["This is great!", "Terrible movie"]
     sample_labels = [1, 0]
@@ -358,7 +358,7 @@ def demo_utility_functions():
     print(f"   Labels: {sequences['labels']}")
 
     # Show tensor details
-    print(f"\n🔍 Tensor details:")
+    print(f"\nTensor details:")
     print(f"   Input IDs dtype: {sequences['input_ids'].dtype}")
     print(f"   Attention mask dtype: {sequences['attention_mask'].dtype}")
     print(f"   Labels dtype: {sequences['labels'].dtype}")
@@ -386,9 +386,9 @@ def demo_utility_functions():
 
 def main():
     """Run all tokenization demonstrations."""
-    print("🎬 TOKENIZATION AND TEXT-TO-SEQUENCE DEMONSTRATION")
+    print("TOKENIZATION AND TEXT-TO-SEQUENCE DEMONSTRATION")
     print(
-        "📝 This script demonstrates converting text to tensors for PyTorch training."
+        "This script demonstrates converting text to tensors for PyTorch training."
     )
     print()
 
@@ -418,10 +418,10 @@ def main():
         demo_utility_functions()
 
         print(f"\n" + "=" * 80)
-        print("✅ TOKENIZATION DEMONSTRATION COMPLETE")
+        print("TOKENIZATION DEMONSTRATION COMPLETE")
         print("=" * 80)
         print()
-        print("💡 Key Features Demonstrated:")
+        print("Key Features Demonstrated:")
         print("• Text-to-sequence conversion with vocabulary")
         print("• Sequence padding and truncation strategies")
         print("• Batch processing with attention masks")
@@ -432,10 +432,10 @@ def main():
         print("• Encoding/decoding round-trip fidelity")
         print("• Preprocessing integration")
         print()
-        print("🚀 Ready for PyTorch Dataset and DataLoader creation!")
+        print("Ready for PyTorch Dataset and DataLoader creation!")
 
     except Exception as e:
-        print(f"❌ Demonstration failed: {e}")
+        print(f"Demonstration failed: {e}")
         import traceback
 
         traceback.print_exc()

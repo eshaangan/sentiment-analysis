@@ -19,7 +19,7 @@ def load_results():
         "transformer_augmented_evaluation_results.yaml": "Transformer + Augmented"
     }
     
-    print("🔍 Loading model evaluation results...")
+    print("Loading model evaluation results...")
     
     for filename, display_name in model_files.items():
         filepath = results_dir / filename
@@ -28,17 +28,17 @@ def load_results():
                 with open(filepath, 'r') as f:
                     data = yaml.safe_load(f)
                     results[display_name] = data
-                    print(f"✅ Loaded results for {display_name}")
+                    print(f"Loaded results for {display_name}")
             except Exception as e:
-                print(f"⚠️  Error loading {filename}: {e}")
+                print(f"Error loading {filename}: {e}")
         else:
-            print(f"⚠️  Missing results for {display_name}: {filename}")
+            print(f"Missing results for {display_name}: {filename}")
     
     return results
 
 def print_comparison(results):
     """Print comparison table."""
-    print("\n🏆 SENTIMENT ANALYSIS MODEL COMPARISON")
+    print("\nSENTIMENT ANALYSIS MODEL COMPARISON")
     print("=" * 80)
     
     # Print header
@@ -83,7 +83,7 @@ def print_comparison(results):
         print(f"   {i}. {model_name}: {efficiency:.2f} (Acc: {accuracy:.3f}, Params: {params:,})")
     
     # Architecture analysis
-    print(f"\n🏗️  ARCHITECTURE ANALYSIS:")
+    print(f"\nARCHITECTURE ANALYSIS:")
     
     cnn_models = [m for m in sorted_models if 'CNN' in m[0]]
     lstm_models = [m for m in sorted_models if 'LSTM' in m[0] and 'Hybrid' not in m[0]]
@@ -91,7 +91,7 @@ def print_comparison(results):
     hybrid_models = [m for m in sorted_models if 'Hybrid' in m[0]]
     
     if cnn_models:
-        print("📈 CNN Models:")
+        print("CNN Models:")
         for model_name, data in cnn_models:
             print(f"   • {model_name}: {data['accuracy']:.3f} accuracy")
     
@@ -141,10 +141,10 @@ def main():
     results = load_results()
     
     if not results:
-        print("❌ No evaluation results found!")
+        print("No evaluation results found!")
         return
     
-    print(f"✅ Loaded results for {len(results)} models")
+    print(f"Loaded results for {len(results)} models")
     
     print_comparison(results)
     save_comparison(results)

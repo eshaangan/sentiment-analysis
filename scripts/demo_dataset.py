@@ -30,7 +30,7 @@ def demo_basic_dataset():
     print("=" * 80)
 
     # Create sample data
-    print("🎬 Creating sample movie review dataset...")
+    print("Creating sample movie review dataset...")
     sample_data = {
         "review": [
             "This movie is absolutely fantastic! Amazing acting and great story.",
@@ -65,11 +65,11 @@ def demo_basic_dataset():
     csv_path.parent.mkdir(parents=True, exist_ok=True)
     df.to_csv(csv_path, index=False)
 
-    print(f"✅ Created dataset with {len(df)} samples")
+    print(f"Created dataset with {len(df)} samples")
     print(f"   Saved to: {csv_path}")
 
     # Create vocabulary and tokenizer
-    print("\n🔧 Creating vocabulary and tokenizer...")
+    print("\nCreating vocabulary and tokenizer...")
     vocab = Vocabulary(min_frequency=1, max_vocab_size=1000)
     preprocessor = create_default_preprocessor()
     vocab.build_from_texts(sample_data["review"], preprocessor)
@@ -78,15 +78,15 @@ def demo_basic_dataset():
         vocabulary=vocab, preprocessor=preprocessor, max_length=50, padding="max_length"
     )
 
-    print(f"✅ Vocabulary created with {vocab.vocab_size} words")
-    print(f"✅ Tokenizer configured with max_length=50")
+    print(f"Vocabulary created with {vocab.vocab_size} words")
+    print(f"Tokenizer configured with max_length=50")
 
     return csv_path, tokenizer, vocab
 
 
 def demo_dataset_creation(csv_path, tokenizer):
     """Demonstrate dataset creation and basic operations."""
-    print(f"\n📊 DATASET CREATION AND OPERATIONS")
+    print(f"\nDATASET CREATION AND OPERATIONS")
     print("-" * 60)
 
     # Create dataset
@@ -98,13 +98,13 @@ def demo_dataset_creation(csv_path, tokenizer):
         max_length=50,
     )
 
-    print(f"✅ Dataset created with {len(dataset)} samples")
+    print(f"Dataset created with {len(dataset)} samples")
     print(f"   Text column: '{dataset.text_column}'")
     print(f"   Label column: '{dataset.label_column}'")
     print(f"   Label mapping: {dataset.label_mapping}")
 
     # Get sample information
-    print(f"\n🔍 Sample Information:")
+    print(f"\nSample Information:")
     for i in range(min(3, len(dataset))):
         info = dataset.get_sample_info(i)
         print(f"   Sample {i+1}:")
@@ -116,7 +116,7 @@ def demo_dataset_creation(csv_path, tokenizer):
         print(f"      Token count: {info['token_count']} tokens")
 
     # Get dataset statistics
-    print(f"\n📈 Dataset Statistics:")
+    print(f"\nDataset Statistics:")
     label_dist = dataset.get_label_distribution()
     print(f"   Label distribution:")
     for label, count in label_dist.items():
@@ -135,10 +135,10 @@ def demo_dataset_creation(csv_path, tokenizer):
 
 def demo_dataset_samples(dataset):
     """Demonstrate getting samples from dataset."""
-    print(f"\n🎯 DATASET SAMPLE ACCESS")
+    print(f"\nDATASET SAMPLE ACCESS")
     print("-" * 60)
 
-    print(f"🔍 Examining first 3 samples:")
+    print(f"Examining first 3 samples:")
 
     for i in range(min(3, len(dataset))):
         print(f"\nSample {i+1}:")
@@ -174,10 +174,10 @@ def demo_dataset_samples(dataset):
 
 def demo_dataset_splitting(dataset):
     """Demonstrate dataset splitting."""
-    print(f"\n✂️ DATASET SPLITTING")
+    print(f"\nDATASET SPLITTING")
     print("-" * 60)
 
-    print(f"📊 Splitting dataset ({len(dataset)} total samples):")
+    print(f"Splitting dataset ({len(dataset)} total samples):")
     print(f"   Training: 70% | Validation: 20% | Test: 10%")
 
     # Split dataset
@@ -185,13 +185,13 @@ def demo_dataset_splitting(dataset):
         dataset, train_ratio=0.7, val_ratio=0.2, test_ratio=0.1, random_seed=42
     )
 
-    print(f"\n✅ Split results:")
+    print(f"\nSplit results:")
     print(f"   Training set: {len(train_dataset)} samples")
     print(f"   Validation set: {len(val_dataset)} samples")
     print(f"   Test set: {len(test_dataset)} samples")
 
     # Verify splits don't overlap
-    print(f"\n🔍 Verifying split integrity:")
+    print(f"\nVerifying split integrity:")
 
     # Get indices for each split (if they're Subset objects)
     if hasattr(train_dataset, "indices"):
@@ -219,7 +219,7 @@ def demo_data_loaders(train_dataset, val_dataset, test_dataset, tokenizer):
     print(f"\n📦 DATALOADER CREATION")
     print("-" * 60)
 
-    print(f"🔧 Creating DataLoaders with batch_size=4:")
+    print(f"Creating DataLoaders with batch_size=4:")
 
     # Create data loaders
     train_loader, val_loader, test_loader = create_data_loaders(
@@ -232,7 +232,7 @@ def demo_data_loaders(train_dataset, val_dataset, test_dataset, tokenizer):
         shuffle_train=True,
     )
 
-    print(f"✅ DataLoaders created:")
+    print(f"DataLoaders created:")
     print(f"   Training: {len(train_loader)} batches")
     print(f"   Validation: {len(val_loader)} batches")
     print(f"   Test: {len(test_loader)} batches")
@@ -275,7 +275,7 @@ def demo_data_loaders(train_dataset, val_dataset, test_dataset, tokenizer):
 
 def demo_complete_pipeline():
     """Demonstrate complete data loading pipeline."""
-    print(f"\n🚀 COMPLETE DATA LOADING PIPELINE")
+    print(f"\nCOMPLETE DATA LOADING PIPELINE")
     print("-" * 60)
 
     # Check if IMDB data exists
@@ -288,7 +288,7 @@ def demo_complete_pipeline():
         print(f"   Test: {imdb_test_path}")
 
         # Create vocabulary from both files
-        print(f"\n🔧 Creating vocabulary from IMDB data...")
+        print(f"\nCreating vocabulary from IMDB data...")
         vocab = create_merged_vocabulary(
             train_csv_path=imdb_train_path,
             test_csv_path=imdb_test_path,
@@ -296,7 +296,7 @@ def demo_complete_pipeline():
             min_frequency=5,
         )
 
-        print(f"✅ Vocabulary created with {vocab.vocab_size} words")
+        print(f"Vocabulary created with {vocab.vocab_size} words")
 
         # Use complete pipeline
         train_loader, val_loader, test_loader, full_dataset = load_sentiment_data(
@@ -311,14 +311,14 @@ def demo_complete_pipeline():
             random_seed=42,
         )
 
-        print(f"\n📊 Pipeline Results:")
+        print(f"\nPipeline Results:")
         print(f"   Full dataset: {len(full_dataset)} samples")
         print(f"   Training batches: {len(train_loader)}")
         print(f"   Validation batches: {len(val_loader)}")
         print(f"   Test batches: {len(test_loader)}")
 
         # Show sample batch
-        print(f"\n🔍 Sample training batch:")
+        print(f"\nSample training batch:")
         batch = next(iter(train_loader))
         print(f"   Batch size: {batch['input_ids'].size(0)}")
         print(f"   Sequence length: {batch['input_ids'].size(1)}")
@@ -328,7 +328,7 @@ def demo_complete_pipeline():
 
         # Show text statistics
         stats = full_dataset.get_text_statistics()
-        print(f"\n📈 Dataset statistics:")
+        print(f"\nDataset statistics:")
         print(f"   Mean token length: {stats['token_length_mean']:.1f}")
         print(f"   95th percentile: {stats['token_length_95th']:.1f}")
         print(f"   Recommended max_length: {int(stats['token_length_95th'])}")
@@ -336,7 +336,7 @@ def demo_complete_pipeline():
         return train_loader, val_loader, test_loader, full_dataset
 
     else:
-        print(f"⚠️ IMDB data not found. Please run data download script first:")
+        print(f"IMDB data not found. Please run data download script first:")
         print(f"   python src/data/download_data.py")
         return None, None, None, None
 
@@ -360,13 +360,13 @@ def demo_augmented_dataset(csv_path, tokenizer):
         ],
     )
 
-    print(f"✅ Augmented dataset created:")
+    print(f"Augmented dataset created:")
     print(f"   Base samples: {len(aug_dataset)}")
     print(f"   Augmentation probability: {aug_dataset.augmentation_prob}")
     print(f"   Augmentation methods: {aug_dataset.augmentation_methods}")
 
     # Compare original vs augmented
-    print(f"\n🔍 Comparing original vs augmented samples:")
+    print(f"\nComparing original vs augmented samples:")
 
     for i in range(min(3, len(aug_dataset))):
         original_text = aug_dataset.samples[i]["text"]
@@ -397,7 +397,7 @@ def demo_augmented_dataset(csv_path, tokenizer):
         aug_dataset, batch_size=4, shuffle=True, collate_fn=collator
     )
 
-    print(f"✅ Augmented DataLoader created with {len(aug_loader)} batches")
+    print(f"Augmented DataLoader created with {len(aug_loader)} batches")
 
     # Show augmented batch
     if len(aug_loader) > 0:
@@ -416,7 +416,7 @@ def demo_performance_optimization():
     print(f"\n⚡ PERFORMANCE OPTIMIZATION")
     print("-" * 60)
 
-    print(f"💡 Performance Tips:")
+    print(f"Performance Tips:")
     print(f"   • Use caching for processed datasets")
     print(f"   • Set num_workers > 0 for faster data loading")
     print(f"   • Use pin_memory=True for GPU training")
@@ -424,7 +424,7 @@ def demo_performance_optimization():
     print(f"   • Consider sequence length distribution for max_length")
     print(f"   • Use drop_last=True for training stability")
 
-    print(f"\n📊 Memory Usage Estimates:")
+    print(f"\nMemory Usage Estimates:")
     batch_sizes = [16, 32, 64, 128]
     seq_length = 256
     vocab_size = 10000
@@ -438,7 +438,7 @@ def demo_performance_optimization():
 
         print(f"   Batch size {batch_size:3d}: ~{total_mb:.1f}MB per batch")
 
-    print(f"\n🔧 Recommended Settings:")
+    print(f"\nRecommended Settings:")
     print(f"   • Small GPU (4-8GB): batch_size=16-32, max_length=256")
     print(f"   • Medium GPU (8-16GB): batch_size=32-64, max_length=512")
     print(f"   • Large GPU (16GB+): batch_size=64-128, max_length=512")
@@ -446,8 +446,8 @@ def demo_performance_optimization():
 
 def main():
     """Run all dataset demonstrations."""
-    print("🎬 PYTORCH DATASET DEMONSTRATION")
-    print("📝 This script demonstrates PyTorch Dataset functionality")
+    print("PYTORCH DATASET DEMONSTRATION")
+    print("This script demonstrates PyTorch Dataset functionality")
     print("    for sentiment analysis data loading and preprocessing.")
     print()
 
@@ -479,10 +479,10 @@ def main():
         demo_performance_optimization()
 
         print(f"\n" + "=" * 80)
-        print("✅ DATASET DEMONSTRATION COMPLETE")
+        print("DATASET DEMONSTRATION COMPLETE")
         print("=" * 80)
         print()
-        print("💡 Key Features Demonstrated:")
+        print("Key Features Demonstrated:")
         print("• PyTorch Dataset class for sentiment analysis")
         print("• Automatic text preprocessing and tokenization")
         print("• Flexible label mapping (binary/multi-class)")
@@ -494,7 +494,7 @@ def main():
         print("• Memory usage optimization")
         print("• Integration with existing vocabulary/tokenizer")
         print()
-        print("🚀 Ready for model training with PyTorch!")
+        print("Ready for model training with PyTorch!")
 
         # Clean up demo file
         if csv_path.exists():
@@ -502,7 +502,7 @@ def main():
             print(f"🧹 Cleaned up demo file: {csv_path}")
 
     except Exception as e:
-        print(f"❌ Demonstration failed: {e}")
+        print(f"Demonstration failed: {e}")
         import traceback
 
         traceback.print_exc()

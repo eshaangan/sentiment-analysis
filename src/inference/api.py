@@ -68,9 +68,9 @@ def load_trained_model():
 try:
     _model, _tokenizer, _preprocessor = load_trained_model()
     _predictor = Predictor(_model, _tokenizer, _preprocessor, class_names=["negative", "positive"])
-    print("✅ Loaded trained sentiment analysis model")
+    print("Loaded trained sentiment analysis model")
 except Exception as e:
-    print(f"❌ Failed to load model: {e}")
+    print(f"Failed to load model: {e}")
     # Fallback to placeholder
     _model = None
     _tokenizer = None

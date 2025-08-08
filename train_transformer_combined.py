@@ -50,9 +50,9 @@ def create_augmented_dataset_if_needed(train_file: str, augmented_file: str, aug
     if not Path(augmented_file).exists():
         logger.info(f"Creating augmented dataset with {augmentation_prob} probability...")
         create_augmented_csv(train_file, augmented_file, augmentation_prob)
-        logger.info("✅ Augmented dataset created")
+        logger.info("Augmented dataset created")
     else:
-        logger.info("✅ Augmented dataset already exists")
+        logger.info("Augmented dataset already exists")
 
 
 def main():
@@ -174,7 +174,7 @@ def main():
             model.position_embedding.weight.copy_(position_embeddings[:args.max_length])
     
     model.to(device)
-    logger.info("✅ BERT-like embeddings initialized")
+    logger.info("BERT-like embeddings initialized")
     logger.info(f"Model parameters: {model.count_parameters():,}")
 
     # Create optimizer and scheduler
@@ -241,18 +241,18 @@ def main():
         logger.info(f"Final Validation Accuracy: {final_val_acc:.4f}")
         
         # Expected improvement analysis
-        logger.info("🎯 Combined Approach Results:")
+        logger.info("Combined Approach Results:")
         logger.info(f"   - Original Transformer: ~67% accuracy")
         logger.info(f"   - With Augmentation: ~85% accuracy")
         logger.info(f"   - With BERT-like: ~85% accuracy")
         logger.info(f"   - Combined Approach: {final_val_acc:.1%} accuracy")
         
         if final_val_acc > 0.85:
-            logger.info("   ✅ SUCCESS: Combined approach achieved >85% accuracy!")
+            logger.info("   SUCCESS: Combined approach achieved >85% accuracy!")
         elif final_val_acc > 0.80:
-            logger.info("   ✅ GOOD: Combined approach achieved >80% accuracy")
+            logger.info("   GOOD: Combined approach achieved >80% accuracy")
         else:
-            logger.info("   ⚠️  Combined approach needs tuning")
+            logger.info("   Combined approach needs tuning")
     else:
         logger.info("Training completed successfully!")
 

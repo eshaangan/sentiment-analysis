@@ -74,7 +74,7 @@ def demo_model_configuration():
     print("MODEL CONFIGURATION DEMONSTRATION")
     print("=" * 80)
 
-    print("🔧 Creating different model configurations...")
+    print("Creating different model configurations...")
 
     # Create different configurations
     configs = {
@@ -111,7 +111,7 @@ def demo_model_configuration():
     }
 
     for name, config in configs.items():
-        print(f"\n📊 {name.upper()} Model Configuration:")
+        print(f"\n{name.upper()} Model Configuration:")
         print(f"   Vocabulary size: {config.vocab_size:,}")
         print(f"   Embedding dimension: {config.embed_dim}")
         print(f"   Hidden dimension: {config.hidden_dim}")
@@ -125,20 +125,20 @@ def demo_model_configuration():
 
 def demo_model_creation_and_summary(configs):
     """Demonstrate model creation and summary features."""
-    print(f"\n📋 MODEL CREATION AND SUMMARY")
+    print(f"\nMODEL CREATION AND SUMMARY")
     print("-" * 60)
 
     models = {}
 
     for name, config in configs.items():
-        print(f"\n🏗️ Creating {name} model...")
+        print(f"\nCreating {name} model...")
         model = DemoLSTMModel(config)
         models[name] = model
 
         # Get parameter summary
         param_summary = model.get_parameter_summary()
 
-        print(f"✅ {name.capitalize()} model created:")
+        print(f"{name.capitalize()} model created:")
         print(f"   Total parameters: {param_summary['total_parameters']:,}")
         print(f"   Trainable parameters: {param_summary['trainable_parameters']:,}")
         print(f"   Model size: {param_summary['model_size_mb']:.2f} MB")
@@ -146,7 +146,7 @@ def demo_model_creation_and_summary(configs):
 
         # Show layer breakdown for medium model
         if name == "medium":
-            print(f"\n   📊 Layer breakdown:")
+            print(f"\n   Layer breakdown:")
             for layer_type, info in param_summary["layer_breakdown"].items():
                 print(
                     f"      {layer_type}: {info['count']} layers, {info['params']:,} parameters"
@@ -164,12 +164,12 @@ def demo_forward_pass(models):
     batch_size = 4
     seq_length = 20
 
-    print(f"📝 Creating sample input:")
+    print(f"Creating sample input:")
     print(f"   Batch size: {batch_size}")
     print(f"   Sequence length: {seq_length}")
 
     for name, model in models.items():
-        print(f"\n🎯 Testing {name} model:")
+        print(f"\nTesting {name} model:")
 
         # Create input for this model's vocabulary
         input_ids = torch.randint(1, model.config.vocab_size, (batch_size, seq_length))
@@ -200,7 +200,7 @@ def demo_embedding_operations(models):
 
     model = models["medium"]  # Use medium model for demo
 
-    print(f"🎯 Working with medium model embeddings:")
+    print(f"Working with medium model embeddings:")
     print(f"   Embedding shape: {model.embedding.weight.shape}")
 
     # Get current embedding weights
@@ -209,7 +209,7 @@ def demo_embedding_operations(models):
     print(f"   Original embedding std: {original_weights.std().item():.6f}")
 
     # Test freeze/unfreeze
-    print(f"\n❄️ Testing freeze/unfreeze:")
+    print(f"\nTesting freeze/unfreeze:")
     print(f"   Initial requires_grad: {model.embedding.weight.requires_grad}")
 
     model.freeze_embedding()
@@ -254,13 +254,13 @@ def demo_model_persistence(models):
 
     # Verify files exist
     if model_path.exists():
-        print(f"   ✅ Model file saved ({model_path.stat().st_size} bytes)")
+        print(f"   Model file saved ({model_path.stat().st_size} bytes)")
     if config_path.exists():
-        print(f"   ✅ Config file saved ({config_path.stat().st_size} bytes)")
+        print(f"   Config file saved ({config_path.stat().st_size} bytes)")
 
     # Load and verify checkpoint structure
     checkpoint = torch.load(model_path, map_location="cpu")
-    print(f"\n📋 Checkpoint contents:")
+    print(f"\nCheckpoint contents:")
     for key in checkpoint.keys():
         if key == "model_state_dict":
             print(f"   {key}: {len(checkpoint[key])} state dict entries")
@@ -270,12 +270,12 @@ def demo_model_persistence(models):
 
 def demo_device_management(models):
     """Demonstrate device management features."""
-    print(f"\n🖥️ DEVICE MANAGEMENT")
+    print(f"\nDEVICE MANAGEMENT")
     print("-" * 60)
 
     model = models["small"]
 
-    print(f"🔍 Device information:")
+    print(f"Device information:")
     print(f"   Current device: {model.device}")
     print(f"   CUDA available: {torch.cuda.is_available()}")
 
@@ -301,9 +301,9 @@ def demo_device_management(models):
             input_ids = input_ids.to(model.device)
             output = model(input_ids)
             print(f"   Output device: {output.device}")
-            print(f"   ✅ Forward pass successful")
+            print(f"   Forward pass successful")
         except Exception as e:
-            print(f"   ❌ Forward pass failed: {e}")
+            print(f"   Forward pass failed: {e}")
 
 
 def demo_gradient_operations(models):
@@ -314,7 +314,7 @@ def demo_gradient_operations(models):
     model = models["small"]
     model.train()
 
-    print(f"🔧 Testing gradient operations:")
+    print(f"Testing gradient operations:")
 
     # Create dummy training step
     batch_size, seq_len = 3, 15
@@ -343,7 +343,7 @@ def demo_gradient_operations(models):
 
 def demo_model_summary(models):
     """Demonstrate comprehensive model summary."""
-    print(f"\n📊 COMPREHENSIVE MODEL SUMMARY")
+    print(f"\nCOMPREHENSIVE MODEL SUMMARY")
     print("-" * 60)
 
     for name, model in models.items():
@@ -353,8 +353,8 @@ def demo_model_summary(models):
 
 def main():
     """Run all base model demonstrations."""
-    print("🏗️ BASE MODEL FUNCTIONALITY DEMONSTRATION")
-    print("📝 This script demonstrates the features of the BaseModel class")
+    print("BASE MODEL FUNCTIONALITY DEMONSTRATION")
+    print("This script demonstrates the features of the BaseModel class")
     print("    and common functionality for all sentiment analysis models.")
     print()
 
@@ -384,10 +384,10 @@ def main():
         demo_model_summary(models)
 
         print(f"\n" + "=" * 80)
-        print("✅ BASE MODEL DEMONSTRATION COMPLETE")
+        print("BASE MODEL DEMONSTRATION COMPLETE")
         print("=" * 80)
         print()
-        print("💡 Key Features Demonstrated:")
+        print("Key Features Demonstrated:")
         print("• Automatic device detection and management")
         print("• Flexible model configuration system")
         print("• Common embedding and classification layers")
@@ -398,10 +398,10 @@ def main():
         print("• Forward pass and prediction methods")
         print("• Integration with PyTorch training ecosystem")
         print()
-        print("🚀 Ready for specific model architecture implementation!")
+        print("Ready for specific model architecture implementation!")
 
     except Exception as e:
-        print(f"❌ Demonstration failed: {e}")
+        print(f"Demonstration failed: {e}")
         import traceback
 
         traceback.print_exc()

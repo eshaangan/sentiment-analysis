@@ -161,7 +161,7 @@ def create_augmented_csv(input_file: str, output_file: str, augmentation_prob: f
     
     # Save to file
     augmented_df.to_csv(output_file, index=False)
-    print(f"✅ Augmented dataset saved to {output_file}")
+    print(f"Augmented dataset saved to {output_file}")
     print(f"   Original samples: {len(df)}")
     print(f"   Augmented samples: {len(augmented_df)}")
     print(f"   Increase: {len(augmented_df) / len(df):.1f}x")

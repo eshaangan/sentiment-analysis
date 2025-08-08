@@ -108,7 +108,7 @@ def main():
     model = load_model(checkpoint_path, vocabulary, device)
 
     if args.interactive:
-        print("\n🎬 Sentiment Analysis Interactive Mode")
+        print("\nSentiment Analysis Interactive Mode")
         print("Enter text to analyze (or 'quit' to exit):")
         print("-" * 50)
         
@@ -121,7 +121,7 @@ def main():
                     continue
                 
                 result = predict_sentiment(text, model, tokenizer, device)
-                print(f"\n📊 Analysis Results:")
+                print(f"\nAnalysis Results:")
                 print(f"   Sentiment: {result['sentiment'].upper()}")
                 print(f"   Confidence: {result['confidence']:.2%}")
                 print(f"   Negative: {result['probabilities']['negative']:.2%}")
@@ -136,7 +136,7 @@ def main():
         
     elif args.text:
         result = predict_sentiment(args.text, model, tokenizer, device)
-        print(f"\n📊 Analysis Results for: '{args.text}'")
+        print(f"\nAnalysis Results for: '{args.text}'")
         print(f"   Sentiment: {result['sentiment'].upper()}")
         print(f"   Confidence: {result['confidence']:.2%}")
         print(f"   Negative: {result['probabilities']['negative']:.2%}")

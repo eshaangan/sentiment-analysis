@@ -1,36 +1,36 @@
-# 🚀 Transformer Model Improvement Guide
+# Transformer Model Improvement Guide
 
-## 📊 Current Performance
+## Current Performance
 - **Transformer**: 67.00% accuracy
 - **Improved Transformer**: 51.10% accuracy (worse due to overfitting)
 - **Target**: >80% accuracy to compete with CNN (83.80%)
 
-## 🎯 Key Issues & Solutions
+## Key Issues & Solutions
 
-### 1. **Data Size Problem** ❌
+### 1. **Data Size Problem**
 **Issue**: Transformers need massive datasets (millions of samples)
 **Current**: 25K samples
 **Solutions**:
-- ✅ **Data Augmentation** (2-3x increase)
-- ✅ **Transfer Learning** (pre-trained embeddings)
-- ✅ **Cross-validation** (better data utilization)
+- **Data Augmentation** (2-3x increase)
+- **Transfer Learning** (pre-trained embeddings)
+- **Cross-validation** (better data utilization)
 
-### 2. **Model Complexity** ❌
+### 2. **Model Complexity**
 **Issue**: Too many parameters for available data
 **Current**: 7.1M parameters
 **Solutions**:
-- ✅ **Smaller Architecture** (reduce layers, heads)
-- ✅ **Regularization** (dropout, weight decay)
-- ✅ **Early Stopping** (prevent overfitting)
+- **Smaller Architecture** (reduce layers, heads)
+- **Regularization** (dropout, weight decay)
+- **Early Stopping** (prevent overfitting)
 
-### 3. **Training Dynamics** ❌
+### 3. **Training Dynamics**
 **Issue**: Poor convergence with current hyperparameters
 **Solutions**:
-- ✅ **Lower Learning Rate** (0.00005 instead of 0.0005)
-- ✅ **Smaller Batch Size** (8 instead of 32)
-- ✅ **Better Scheduler** (warmup + cosine)
+- **Lower Learning Rate** (0.00005 instead of 0.0005)
+- **Smaller Batch Size** (8 instead of 32)
+- **Better Scheduler** (warmup + cosine)
 
-## 🛠️ Implementation Strategies
+## Implementation Strategies
 
 ### Strategy 1: Pre-trained Embeddings (Recommended)
 ```bash
@@ -68,7 +68,7 @@ python train_transformer_bert.py --epochs 30 --batch-size 8 --learning-rate 0.00
 - Better semantic understanding
 - Improved performance
 
-## 📈 Expected Improvements
+## Expected Improvements
 
 | Strategy | Expected Accuracy | Training Time | Complexity |
 |----------|------------------|---------------|------------|
@@ -77,7 +77,7 @@ python train_transformer_bert.py --epochs 30 --batch-size 8 --learning-rate 0.00
 | **BERT Transfer Learning** | 80-85% | 30 epochs | High |
 | **Combined Approach** | **85-90%** | 35 epochs | Very High |
 
-## 🎯 Recommended Approach
+## Recommended Approach
 
 ### Phase 1: Quick Win (Pre-trained Embeddings)
 ```bash
@@ -101,7 +101,7 @@ python train_transformer_bert.py
 ```
 **Expected**: 85-90% accuracy
 
-## 🔧 Hyperparameter Optimization
+## Hyperparameter Optimization
 
 ### Best Settings for Small Dataset:
 ```python
@@ -123,7 +123,7 @@ max_length = 128         # Shorter sequences
 min_frequency = 3        # Higher frequency threshold
 ```
 
-## 📊 Monitoring & Evaluation
+## Monitoring & Evaluation
 
 ### Key Metrics to Watch:
 1. **Training Loss**: Should decrease steadily
@@ -150,7 +150,7 @@ min_frequency = 3        # Higher frequency threshold
 - **Signs**: Loss not decreasing
 - **Solutions**: Lower learning rate, better initialization, gradient clipping
 
-## 🎯 Success Criteria
+## Success Criteria
 
 ### Target Performance:
 - **Accuracy**: >80% (to beat CNN)
@@ -164,7 +164,7 @@ min_frequency = 3        # Higher frequency threshold
 - Model agreement analysis
 - Confusion matrix analysis
 
-## 🚀 Next Steps
+## Next Steps
 
 1. **Start with pre-trained embeddings** (easiest win)
 2. **Add data augmentation** (moderate effort)
@@ -172,7 +172,7 @@ min_frequency = 3        # Higher frequency threshold
 4. **Compare with CNN** (benchmark)
 5. **Optimize hyperparameters** (fine-tuning)
 
-## 📚 Additional Resources
+## Additional Resources
 
 - **Paper**: "Attention Is All You Need" (Vaswani et al.)
 - **BERT Paper**: "BERT: Pre-training of Deep Bidirectional Transformers"

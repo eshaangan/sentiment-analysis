@@ -132,7 +132,7 @@ def main():
             vocabulary.vocab_size, args.embed_dim, device
         )
         model.embedding.weight.data.copy_(bert_embeddings)
-        logger.info("✅ BERT-like embeddings initialized")
+        logger.info("BERT-like embeddings initialized")
     
     logger.info(f"Model parameters: {model.count_parameters():,}")
     
