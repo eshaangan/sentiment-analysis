@@ -471,9 +471,10 @@ class TestAttentionLayer:
         batch_size, seq_len, hidden_dim = 4, 10, 128
         num_heads = 8
 
-        attention = AttentionLayer(hidden_dim, num_heads, dropout=0.1).to("mps")
-        x = torch.randn(batch_size, seq_len, hidden_dim, device="mps")
-        mask = torch.ones(batch_size, seq_len, device="mps")
+        device = "mps" if (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()) else "cpu"
+        attention = AttentionLayer(hidden_dim, num_heads, dropout=0.1).to(device)
+        x = torch.randn(batch_size, seq_len, hidden_dim, device=device)
+        mask = torch.ones(batch_size, seq_len, device=device)
 
         output, weights = attention(x, mask)
 
@@ -485,10 +486,11 @@ class TestAttentionLayer:
         batch_size, seq_len, hidden_dim = 2, 8, 64
         num_heads = 4
 
-        attention = AttentionLayer(hidden_dim, num_heads, dropout=0.1).to("mps")
-        x = torch.randn(batch_size, seq_len, hidden_dim, device="mps")
+        device = "mps" if (hasattr(torch.backends, "mps") and torch.backends.mps.is_available()) else "cpu"
+        attention = AttentionLayer(hidden_dim, num_heads, dropout=0.1).to(device)
+        x = torch.randn(batch_size, seq_len, hidden_dim, device=device)
         mask = torch.tensor(
-            [[1, 1, 1, 1, 0, 0, 0, 0], [1, 1, 1, 1, 1, 1, 0, 0]], device="mps"
+            [[1, 1, 1, 1, 0, 0, 0, 0], [1, 1, 1, 1, 1, 1, 0, 0]], device=device
         )
 
         output, weights = attention(x, mask)

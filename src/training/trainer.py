@@ -65,18 +65,23 @@ class Trainer:
             if isinstance(batch, dict):
                 input_ids = batch["input_ids"].to(self.device)
                 labels = batch["labels"].to(self.device)
+                attention_mask = batch.get("attention_mask")
+                if attention_mask is not None:
+                    attention_mask = attention_mask.to(self.device)
             else:
                 input_ids, labels = batch[0].to(self.device), batch[1].to(self.device)
+                attention_mask = None
             self.optimizer.zero_grad(set_to_none=True)
-            logits = self.model(input_ids)
+            logits = (
+                self.model(input_ids, attention_mask=attention_mask)
+                if attention_mask is not None
+                else self.model(input_ids)
+            )
             loss = self.criterion(logits, labels)
             loss.backward()
             if self.grad_clip is not None:
                 torch.nn.utils.clip_grad_norm_(self.model.parameters(), self.grad_clip)
             self.optimizer.step()
-
-            if self.scheduler is not None:
-                self.scheduler.step()
 
             epoch_loss += loss.item() * labels.size(0)
             preds = logits.argmax(dim=1)
@@ -102,9 +107,17 @@ class Trainer:
             if isinstance(batch, dict):
                 input_ids = batch["input_ids"].to(self.device)
                 labels = batch["labels"].to(self.device)
+                attention_mask = batch.get("attention_mask")
+                if attention_mask is not None:
+                    attention_mask = attention_mask.to(self.device)
             else:
                 input_ids, labels = batch[0].to(self.device), batch[1].to(self.device)
-            logits = self.model(input_ids)
+                attention_mask = None
+            logits = (
+                self.model(input_ids, attention_mask=attention_mask)
+                if attention_mask is not None
+                else self.model(input_ids)
+            )
             loss = self.criterion(logits, labels)
             total_loss += loss.item() * labels.size(0)
             preds = logits.argmax(dim=1)
@@ -141,6 +154,13 @@ class Trainer:
                 val_loss,
                 val_acc,
             )
+
+            # Step scheduler once per epoch if provided
+            if self.scheduler is not None:
+                try:
+                    self.scheduler.step()
+                except Exception as e:
+                    logger.warning("Scheduler step failed: %s", e)
 
             # Early stopping on validation loss
             if early_stopper is not None:
