@@ -22,6 +22,11 @@ install:
 	pip install --upgrade pip
 	pip install -r requirements.txt
 
+# Install minimal runtime deps
+install-runtime:
+	pip install --upgrade pip
+	pip install -r requirements-runtime.txt
+
 # Run tests
 test:
 	python -m pytest tests/ -v

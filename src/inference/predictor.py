@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 import torch
 
@@ -95,4 +95,52 @@ class Predictor:
                 else "unknown"
             )
             results.append((label, conf))
+        return results
+
+    def predict_with_proba(self, text: str, threshold: float | None = None) -> Dict[str, float | str | Dict[str, float]]:
+        cleaned = self.preprocessor.clean_text(text)
+        encoded = self.tokenizer.encode(cleaned, add_special_tokens=True, return_tensors="pt")
+        if isinstance(encoded, dict):
+            input_tensor = encoded["input_ids"].to(self.device)
+            attention_mask = encoded.get("attention_mask")
+            if attention_mask is not None:
+                attention_mask = attention_mask.to(self.device)
+        else:
+            input_tensor = torch.tensor(encoded, dtype=torch.long).unsqueeze(0).to(self.device)
+            attention_mask = None
+        probs = self.model.predict(input_tensor, attention_mask)[0]
+        idx = int(torch.argmax(probs))
+        conf = float(probs[idx])
+        label = self.class_names[idx] if threshold is None or conf >= threshold else "unknown"
+        prob_dict: Dict[str, float] = {self.class_names[i]: float(probs[i]) for i in range(len(self.class_names))}
+        return {"label": label, "confidence": conf, "probabilities": prob_dict}
+
+    def predict_batch_with_proba(self, texts: List[str], threshold: float | None = None) -> List[Dict[str, float | str | Dict[str, float]]]:
+        results: List[Dict[str, float | str | Dict[str, float]]] = []
+        tensors: List[torch.Tensor] = []
+        lengths: List[int] = []
+        for t in texts:
+            cleaned = self.preprocessor.clean_text(t)
+            encoded = self.tokenizer.encode(cleaned, add_special_tokens=True, return_tensors="pt")
+            if isinstance(encoded, dict):
+                ids = encoded["input_ids"].squeeze(0)
+            else:
+                ids = torch.tensor(encoded, dtype=torch.long)
+            tensors.append(ids)
+            lengths.append(len(ids))
+        if not tensors:
+            return []
+        max_len = max(lengths)
+        padded = [
+            torch.nn.functional.pad(t, (0, max_len - len(t)), value=self.tokenizer.pad_token_id)
+            for t in tensors
+        ]
+        batch_tensor = torch.stack(padded).to(self.device)
+        probs_batch = self.model.predict(batch_tensor)
+        for p in probs_batch:
+            idx = int(torch.argmax(p))
+            conf = float(p[idx])
+            label = self.class_names[idx] if threshold is None or conf >= threshold else "unknown"
+            prob_dict: Dict[str, float] = {self.class_names[i]: float(p[i]) for i in range(len(self.class_names))}
+            results.append({"label": label, "confidence": conf, "probabilities": prob_dict})
         return results
