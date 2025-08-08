@@ -147,7 +147,7 @@ sentiment-analysis/
 │   │   └── dataset.py                # Dataset classes
 │   ├── models/                       # Model architectures
 │   │   ├── lstm_model.py             # LSTM models
-│   │   ├── cnn_model.py              # CNN models
+│   │   ├── cnn_model.py              # CNN models 
 │   │   ├── transformer_model.py      # Transformer models
 │   │   └── base_model.py             # Base model class
 │   ├── training/                     # Training utilities
@@ -300,9 +300,7 @@ pytest tests/test_training.py
 ```bash
 python -m uvicorn src.inference.api:app --reload
 ```
-
 ### API Endpoints
-
 #### Single Prediction
 ```bash
 curl -X POST "http://127.0.0.1:8000/predict" \

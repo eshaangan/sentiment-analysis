@@ -130,7 +130,7 @@ def demo_forward_pass_and_pooling(models):
     print(f"\nFORWARD PASS AND POOLING STRATEGIES")
     print("-" * 60)
 
-    # Create sample input data
+    # Create sample input data 
     batch_size = 3
     seq_length = 15
 
