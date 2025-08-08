@@ -7,9 +7,10 @@ import json
 import pickle
 from collections import Counter, OrderedDict
 from pathlib import Path
-from typing import Dict, List, Optional, Set, Union
+from typing import Dict, List, Optional, Set, Union, Any
 
-import pandas as pd
+# Avoid importing pandas at module import time to keep inference lightweight
+pd = None  # type: ignore
 import torch
 from src.data.preprocessing import TextPreprocessor
 
@@ -264,6 +265,9 @@ def create_vocabulary_from_data(
     save_path: Optional[Union[str, Path]] = None,
 ) -> Vocabulary:
     """Create vocabulary from training and test data combined."""
+    global pd
+    if pd is None:
+        import pandas as pd  # type: ignore
     train_df = pd.read_csv(train_csv_path)
     test_df = pd.read_csv(test_csv_path)
 
@@ -309,7 +313,7 @@ def create_merged_vocabulary(
 
 def _build_from_dataframe(
     self,
-    df: pd.DataFrame,
+    df: Any,
     text_column: str,
     preprocessor: Optional[TextPreprocessor] = None,
 ) -> None:

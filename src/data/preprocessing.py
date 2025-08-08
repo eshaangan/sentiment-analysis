@@ -8,9 +8,17 @@ import ssl
 import string
 from typing import List, Optional, Union
 
-import nltk
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize
+# Make NLTK optional to keep inference lightweight
+try:
+    import nltk  # type: ignore
+    from nltk.corpus import stopwords  # type: ignore
+    from nltk.tokenize import word_tokenize  # type: ignore
+    _NLTK_AVAILABLE = True
+except Exception:
+    nltk = None  # type: ignore
+    stopwords = None  # type: ignore
+    word_tokenize = None  # type: ignore
+    _NLTK_AVAILABLE = False
 
 # Handle SSL certificate issues for NLTK downloads
 try:
@@ -44,6 +52,7 @@ class TextPreprocessor:
         expand_contractions: bool = True,
         min_word_length: int = 2,
         max_word_length: int = 50,
+        use_nltk_tokenizer: bool = False,
     ):
         """
         Initialize the text preprocessor.
@@ -57,6 +66,7 @@ class TextPreprocessor:
             expand_contractions: Expand contractions (e.g., "don't" -> "do not")
             min_word_length: Minimum word length to keep
             max_word_length: Maximum word length to keep
+            use_nltk_tokenizer: Whether to use NLTK's tokenizer (may download data)
         """
         self.lowercase = lowercase
         self.remove_html = remove_html
@@ -66,13 +76,17 @@ class TextPreprocessor:
         self.expand_contractions = expand_contractions
         self.min_word_length = min_word_length
         self.max_word_length = max_word_length
+        self.use_nltk_tokenizer = use_nltk_tokenizer and _NLTK_AVAILABLE
 
-        # Initialize NLTK components
-        self._download_nltk_data()
+        # Initialize NLTK components lazily and only if needed
+        self._has_punkt = False
+        self._has_stopwords = False
+        if self.use_nltk_tokenizer:
+            self._download_nltk_punkt()
 
         if self.remove_stopwords:
-            if self._has_stopwords:
-                self.stop_words = set(stopwords.words("english"))
+            if self._ensure_stopwords():
+                self.stop_words = set(stopwords.words("english"))  # type: ignore
             else:
                 # Fallback stopwords list
                 self.stop_words = {
@@ -218,33 +232,40 @@ class TextPreprocessor:
             "you've": "you have",
         }
 
-    def _download_nltk_data(self) -> None:
-        """Download required NLTK data with fallback handling."""
-        # Try to download punkt tokenizer
+    def _download_nltk_punkt(self) -> None:
+        """Ensure punkt tokenizer is available if NLTK is installed and requested."""
+        if not _NLTK_AVAILABLE:
+            self._has_punkt = False
+            return
         try:
-            nltk.data.find("tokenizers/punkt")
+            nltk.data.find("tokenizers/punkt")  # type: ignore
             self._has_punkt = True
         except LookupError:
             try:
                 print("Downloading NLTK punkt tokenizer...")
-                nltk.download("punkt", quiet=True)
+                nltk.download("punkt", quiet=True)  # type: ignore
                 self._has_punkt = True
             except Exception as e:
                 print(f"Warning: Could not download punkt tokenizer: {e}")
                 self._has_punkt = False
 
-        # Try to download stopwords
+    def _ensure_stopwords(self) -> bool:
+        """Ensure stopwords corpus is available if NLTK is installed and requested."""
+        if not _NLTK_AVAILABLE:
+            self._has_stopwords = False
+            return False
         try:
-            nltk.data.find("corpora/stopwords")
+            nltk.data.find("corpora/stopwords")  # type: ignore
             self._has_stopwords = True
         except LookupError:
             try:
                 print("Downloading NLTK stopwords...")
-                nltk.download("stopwords", quiet=True)
+                nltk.download("stopwords", quiet=True)  # type: ignore
                 self._has_stopwords = True
             except Exception as e:
                 print(f"Warning: Could not download stopwords: {e}")
                 self._has_stopwords = False
+        return self._has_stopwords
 
     def remove_html_tags(self, text: str) -> str:
         """
@@ -388,10 +409,10 @@ class TextPreprocessor:
         Returns:
             List of tokens
         """
-        # Use NLTK tokenizer if available, otherwise use simple tokenizer
-        if self._has_punkt:
+        # Use NLTK tokenizer if available and requested, otherwise use simple tokenizer
+        if self.use_nltk_tokenizer and self._has_punkt and word_tokenize is not None:
             try:
-                tokens = word_tokenize(text)
+                tokens = word_tokenize(text)  # type: ignore
             except LookupError:
                 # Fallback to simple tokenization
                 tokens = self._simple_tokenize(text)
@@ -508,6 +529,7 @@ def create_default_preprocessor() -> TextPreprocessor:
         expand_contractions=True,
         min_word_length=1,  # Allow single-letter words like "i"
         max_word_length=50,
+        use_nltk_tokenizer=False,
     )
 
 
