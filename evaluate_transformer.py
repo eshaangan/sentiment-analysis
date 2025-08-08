@@ -64,6 +64,11 @@ def main():
     parser.add_argument("--batch-size", type=int, default=64, help="Batch size for evaluation")
     parser.add_argument("--max-length", type=int, default=256, help="Maximum sequence length")
     parser.add_argument("--max-vocab-size", type=int, default=10000, help="Maximum vocabulary size")
+    # Model architecture (match training settings if needed)
+    parser.add_argument("--embed-dim", type=int, default=128, help="Embedding dimension")
+    parser.add_argument("--num-heads", type=int, default=8, help="Number of attention heads")
+    parser.add_argument("--num-layers", type=int, default=4, help="Number of transformer layers")
+    parser.add_argument("--hidden-dim", type=int, default=512, help="Feed-forward hidden dimension")
 
     args = parser.parse_args()
 
@@ -126,10 +131,10 @@ def main():
     logger.info("Loading Transformer model...")
     config = TransformerConfig(
         vocab_size=vocabulary.vocab_size,
-        embed_dim=128,
-        num_heads=8,
-        num_layers=4,
-        hidden_dim=256,
+        embed_dim=args.embed_dim,
+        num_heads=args.num_heads,
+        num_layers=args.num_layers,
+        hidden_dim=args.hidden_dim,
         max_seq_length=args.max_length,
         output_dim=2,
         dropout=0.1,

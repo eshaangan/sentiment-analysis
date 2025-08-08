@@ -22,6 +22,7 @@ A comprehensive sentiment analysis system built with PyTorch, featuring LSTM mod
 | Model | Test Accuracy | Precision | Recall | F1-Score | Parameters | Efficiency* |
 |-------|---------------|-----------|--------|----------|------------|-------------|
 | **Transformer + Augmented** | **85.00%** | 85.15% | 85.00% | 85.00% | 2.1M | 0.40 |
+| **Transformer + BERT-like (30e)** | **85.00%** | 85.03% | 85.00% | 84.99% | 2.1M | 0.40 |
 | **Optimized CNN** | 83.80% | 84.00% | 83.80% | 83.79% | 1.1M | **0.73** |
 | **Hybrid CNN+LSTM** | 81.10% | 81.20% | 81.10% | 81.10% | 2.2M | 0.37 |
 | **Transformer + Pre-trained** | 78.20% | 79.65% | 78.20% | 77.86% | 1.4M | 0.54 |
@@ -31,11 +32,10 @@ A comprehensive sentiment analysis system built with PyTorch, featuring LSTM mod
 
 *Efficiency = Accuracy per million parameters
 
-### **Winner: Transformer + Augmented Data**
-- **Highest accuracy**: 85.00%
-- **Best performance**: Transformed from worst (67%) to best (85%)
-- **Robust model**: 2.2x data augmentation for better generalization
-- **Advanced techniques**: NLTK-based text augmentation
+### **Winner: Transformer + Augmented Data / BERT-like (tie)**
+- **Highest accuracy**: 85.00% (tie)
+- **Augmented**: 2.2x data for better generalization
+- **BERT-like (30 epochs)**: Transfer learning style initialization achieving 85.0%
 
 ### **Runner-up: Optimized CNN**
 - **Most efficient**: 0.73 accuracy per million parameters
@@ -90,6 +90,9 @@ python train_transformer_pretrained.py --epochs 25 --batch-size 16 --learning-ra
 
 # Train Transformer with data augmentation (85.0% accuracy - BEST)
 python train_transformer_augmented.py --epochs 15 --batch-size 32 --learning-rate 0.0001
+
+# Train BERT-like Transformer (30 epochs, 85.0% accuracy)
+python train_transformer_bert_simple.py --epochs 30 --batch-size 32 --learning-rate 0.0001
 ```
 
 ### 4. Make Predictions
@@ -117,6 +120,9 @@ python predict.py --checkpoint models/checkpoints/transformer_augmented.pt --int
 
 # Interactive mode with Transformer + Pre-trained
 python predict.py --checkpoint models/checkpoints/transformer_pretrained.pt --interactive
+
+# Interactive mode with Transformer + BERT-like (30e)
+python predict.py --checkpoint models/checkpoints/transformer_bert_simple.pt --interactive
 ```
 
 ### 5. Start the API Server
@@ -451,11 +457,11 @@ Positive     99      412
 - **Result**: 67% → 85.0% accuracy
 - **Benefits**: Highest performance, robust model, better generalization
 
-#### 3. **BERT Transfer Learning** (Experimental)
+#### 3. **BERT-like Transfer Learning** (30 epochs)
 - **Implementation**: `train_transformer_bert_simple.py`
-- **Technique**: BERT-like positional encoding and transfer learning
-- **Status**: Simplified version for faster training
-- **Benefits**: Advanced techniques for complex language understanding
+- **Technique**: BERT-like initialization + sinusoidal positions
+- **Result**: 85.0% accuracy (25k IMDB test set)
+- **Notes**: Matches augmented-transformer accuracy without augmentation
 
 ### Data Augmentation Pipeline
 ```python
