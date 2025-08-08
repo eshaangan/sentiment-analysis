@@ -586,6 +586,15 @@ The Transformer model demonstrates the power of proper techniques:
 
 This project showcases how advanced NLP techniques can transform model performance and provides a comprehensive framework for sentiment analysis.
 
+## Conclusion
+
+- **Best overall accuracy**: Transformer with either data augmentation or a BERT-like setup reaches about 85% on IMDB. These approaches benefit most from richer data or pretraining.
+- **Best efficiency and speed**: The optimized CNN delivers 83.8% with ~1.1M parameters, offering the highest accuracy-per-parameter and fastest training/inference. It is the practical default for latency‑sensitive or resource‑constrained deployments.
+- **Reliable baselines**: LSTM and Hybrid CNN+LSTM models perform around 81% and provide stable, easy‑to‑train references.
+- **Trade‑offs**:
+  - Choose Transformer (+augmentation or pretraining) when maximum accuracy is the priority and training budget allows.
+  - Choose Optimized CNN when inference speed, simplicity, and model size matter most with near‑SOTA accuracy.
+
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
